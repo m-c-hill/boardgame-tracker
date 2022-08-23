@@ -108,6 +108,9 @@ class Genre(db.Model, CustomModel):
     def __str__(self):
         return f"{self.name}: {self.description}"
 
+    def format(self):
+        return {"id": self.id, "name": self.name, "description": self.description}
+
 
 class Designer(db.Model, CustomModel):
     __tablename__ = "designers"

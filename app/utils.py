@@ -1,7 +1,7 @@
 from flask import request
 
 
-def paginate_questions(request: request, items: list, items_per_page: int):
+def paginate_items(request: request, items: list, items_per_page: int) -> list:
     """
     Return paginated list of items from requested page number.
     """
