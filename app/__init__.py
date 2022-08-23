@@ -7,6 +7,7 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 def create_app(config_class: Config):
     """
     Application factory to create a Flask app with the supplied configuration
