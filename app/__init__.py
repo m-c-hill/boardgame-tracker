@@ -20,8 +20,8 @@ def create_app(config_class: Config):
         db.create_all()
         migrate.init_app(app, db, compare_type=True)
 
-    # from app.offers import bp as users_bp
+    # from app.routes import bp as users_bp
 
-    # app.register_blueprint(users_bp, url_prefix="/api")
+    # app.register_blueprint(boardgames, url_prefix="/api")
 
     return app

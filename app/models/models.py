@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
 from sqlalchemy.types import ARRAY
 
-db = SQLAlchemy()  # TODO: set up db
+from app import db
 
 # Limits for review ratings
 MIN_RATING = 0
@@ -203,7 +203,6 @@ class User(CustomModel):
     username = Column(String(50))
     email = Column(String(200))
     reviews = db.relationship("Review", backref="users", lazy=True)
-    # collection
     # TODO: implement collection function
 
     def __init__(self, username, email):
