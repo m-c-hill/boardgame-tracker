@@ -1,10 +1,4 @@
-import os
-from email.mime import image
-
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
-from sqlalchemy.types import ARRAY
 
 from app import db
 
@@ -13,7 +7,7 @@ MIN_RATING = 0
 MAX_RATING = 5
 
 
-class CustomModel(db.Model):
+class CustomModel:
     def insert(self):
         db.session.add(self)
         db.session.commit()
@@ -26,7 +20,7 @@ class CustomModel(db.Model):
         db.session.commit()
 
 
-class BoardGame(CustomModel):
+class BoardGame(db.Model, CustomModel):
     __tablename__ = "board_games"
 
     id = Column(Integer, primary_key=True)
@@ -38,11 +32,11 @@ class BoardGame(CustomModel):
     release_date = Column(Date)
     age = Column(Integer)
     weight = Column(Float)
-    genre = Column(Integer, ForeignKey("genres.id"))
-    designer = Column(String(120), ForeignKey("designers.id"))
-    publisher = Column(String(120), ForeignKey("publishers.id"))
+    genre = Column(Integer, ForeignKey("genres.id"))  # TODO
+    designer = Column(Integer, ForeignKey("designers.id"))  # TODO
+    publisher = Column(Integer, ForeignKey("publishers.id"))  # TODO
     image_link = Column(String(2048))
-    reviews = db.relationship("Review", backref="games", lazy=True)
+    reviews = db.relationship("Review", backref="board_games", lazy=True)  # TODO
 
     def __init__(
         self,
@@ -96,15 +90,15 @@ class BoardGame(CustomModel):
         }
 
 
-class Genre(CustomModel):
+class Genre(db.Model, CustomModel):
     __tablename__ = "genres"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True)
     description = Column(String(250))
-    games = db.relationship("Review", backref="games", lazy=True)
+    board_games = db.relationship("BoardGame", backref="genres", lazy=True)  # TODO
 
-    def __init__(self, name, description, games):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
 
@@ -115,12 +109,13 @@ class Genre(CustomModel):
         return f"{self.name}: {self.description}"
 
 
-class Designer(CustomModel):
+class Designer(db.Model, CustomModel):
     __tablename__ = "designers"
 
     id = Column(Integer, primary_key=True)
     first_name = Column(String(120))
     last_name = Column(String(120))
+    board_games = db.relationship("BoardGame", backref="designers", lazy=True)  # TODO
 
     def __init__(self, first_name, last_name):
         self.first_name = first_name
@@ -140,11 +135,12 @@ class Designer(CustomModel):
         }
 
 
-class Publisher(CustomModel):
+class Publisher(db.Model, CustomModel):
     __tablename__ = "publishers"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(120))
+    board_games = db.relationship("BoardGame", backref="publishers", lazy=True)  # TODO
 
     def __init__(self, name):
         self.name = name
@@ -159,17 +155,19 @@ class Publisher(CustomModel):
         return {"id": self.id, "name": self.name}
 
 
-class Review(CustomModel):
+class Review(db.Model, CustomModel):
     __tablename__ = "reviews"
 
     id = Column(Integer, primary_key=True)
-    game = Column(Integer, ForeignKey("games.id"))
+    board_game = Column(Integer, ForeignKey("board_games.id"))
     review_text = Column(String(1000))
     rating = Column(Integer)  # Rating out of 5 stars
     user = Column(Integer, ForeignKey("users.id"))
+    likes = Column(Integer)
+    dislikes = Column(Integer)
 
     def __init__(self, game_id, review_text, rating, user_id):
-        self.game = game_id
+        self.board_game = game_id
         self.review_text = review_text
         self.rating = (
             MIN_RATING
@@ -179,9 +177,11 @@ class Review(CustomModel):
             else rating
         )
         self.user = user_id
+        self.likes = 0
+        self.dislikes = 0
 
     def __repr__(self):
-        return f"Review('ID':{self.game}, 'Rating': {self.rating})"
+        return f"Review('ID':{self.board_game}, 'Rating': {self.rating})"
 
     def __str__(self):
         return f"ID: {self.id}, {self.rating}/5\n{self.review_text}"
@@ -190,13 +190,13 @@ class Review(CustomModel):
         return {
             "id": self.id,
             "user": self.user,
-            "game_id": self.game,
+            "game_id": self.board_game,
             "rating": self.rating,
             "review_text": self.review_text,
         }
 
 
-class User(CustomModel):
+class User(db.Model, CustomModel):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)

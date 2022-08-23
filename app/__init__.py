@@ -7,6 +7,8 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 
+from app.models.models import BoardGame, Genre, Designer, Publisher, Review, User
+
 
 def create_app(config_class: Config):
     """
@@ -20,8 +22,21 @@ def create_app(config_class: Config):
         db.create_all()
         migrate.init_app(app, db, compare_type=True)
 
-    # from app.routes import bp as users_bp
+    @app.after_request
+    def after_request(response):
+        """
+        When a request is received, run this method to add additional CORS headers to the response.
+        """
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type, Authorization"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS"
+        )
+        return response
 
-    # app.register_blueprint(boardgames, url_prefix="/api")
+    from .main import main as main_blueprint
+
+    app.register_blueprint(main_blueprint, url_prefix="/api")
 
     return app
