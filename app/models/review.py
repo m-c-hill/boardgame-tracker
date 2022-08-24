@@ -1,8 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 
 from app import db
-from .crud_model import CRUDModel
 
+from .crud_model import CRUDModel
 
 # Limits for review ratings
 MIN_RATING = 0

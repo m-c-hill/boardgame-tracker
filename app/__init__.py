@@ -30,8 +30,8 @@ oauth.register(
 
 # Import models
 from app.models.board_game import BoardGame, Designer, Genre, Publisher
-from app.models.user import User
 from app.models.review import Review
+from app.models.user import User
 
 
 def create_app(config_class: Config):

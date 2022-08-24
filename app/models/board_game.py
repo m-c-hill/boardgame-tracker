@@ -3,6 +3,7 @@ from enum import unique
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
 
 from app import db
+
 from .crud_model import CRUDModel
 
 
