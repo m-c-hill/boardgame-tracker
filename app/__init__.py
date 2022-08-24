@@ -1,3 +1,7 @@
+from os import environ as env
+
+from authlib.integrations.flask_client import OAuth
+from dotenv import find_dotenv, load_dotenv
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -6,8 +10,25 @@ from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+oauth = OAuth()
 
-from app.models.models import BoardGame, Genre, Designer, Publisher, Review, User
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+
+oauth.register(
+    "auth0",
+    client_id=env.get("AUTH0_CLIENT_ID"),
+    client_secret=env.get("AUTH0_CLIENT_SECRET"),
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f'https://{env.get("AUTH0_DOMAIN")}/.well-known/openid-configuration',
+)
+
+
+from app.models.models import BoardGame, Designer, Genre, Publisher, Review, User
 
 
 def create_app(config_class: Config):
@@ -16,11 +37,13 @@ def create_app(config_class: Config):
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.secret_key = env.get("APP_SECRET_KEY")
 
     with app.app_context():
         db.init_app(app)
         db.create_all()
         migrate.init_app(app, db, compare_type=True)
+        oauth.init_app(app)
 
     @app.after_request
     def after_request(response):
@@ -38,5 +61,9 @@ def create_app(config_class: Config):
     from .main import main as main_blueprint
 
     app.register_blueprint(main_blueprint, url_prefix="/api")
+
+    from .auth import auth as auth_blueprint
+
+    app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
     return app

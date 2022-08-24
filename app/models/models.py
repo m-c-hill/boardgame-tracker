@@ -1,3 +1,5 @@
+from enum import unique
+
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
 
 from app import db
@@ -203,10 +205,10 @@ class User(db.Model, CustomModel):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(50))
-    email = Column(String(200))
+    auth0_id = Column(String(200), unique=True)
+    username = Column(String(50), unique=True)
+    email = Column(String(200), unique=True)
     reviews = db.relationship("Review", backref="users", lazy=True)
-    # TODO: implement collection function
 
     def __init__(self, username, email):
         self.username = username

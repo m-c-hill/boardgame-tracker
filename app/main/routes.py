@@ -1,14 +1,15 @@
-from . import main
-
-from flask import abort, jsonify, request
-
+from flask import _app_ctx_stack, abort, jsonify, request
 from numpy import mean
 
-from app.models.models import BoardGame, Review, User, Publisher, Genre, Designer
-from ..utils import paginate_items
+from app.models.models import BoardGame, Designer, Genre, Publisher, Review
+
+from ..utils.auth0 import requires_auth  # TODO: authorize_user, current_user
+from ..utils.requests import paginate_items
+from . import main
 
 GAMES_PER_PAGE = 10
 REVIEWS_PER_PAGE = 5
+
 
 # ========================
 #  Board Game Enpoints
@@ -66,6 +67,7 @@ def get_reviews_for_game(game_id):
 
 
 @main.route("/games", methods=["POST"])
+@requires_auth("post:games")
 def create_game():
     body = request.get_json()
 
@@ -86,15 +88,16 @@ def create_game():
         )
         game.insert()
 
-        games = (
-            BoardGame.query
-            .order_by(BoardGame.id)
-            .all()
-        )
+        games = BoardGame.query.order_by(BoardGame.id).all()
         formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
 
         return jsonify(
-            {"success": True, "created": game.id, "games": formatted_games, "total_games": len(games)}
+            {
+                "success": True,
+                "created": game.id,
+                "games": formatted_games,
+                "total_games": len(games),
+            }
         )
 
     except:
@@ -102,6 +105,7 @@ def create_game():
 
 
 @main.route("/games/<int:game_id>", methods=["PATCH"])
+@requires_auth("patch:games")
 def update_game(game_id):
     game = BoardGame.query.filter_by(id=game_id).one_or_none()
 
@@ -115,8 +119,12 @@ def update_game(game_id):
         game.description = updates.get("description", game.description)
         game.min_player_count = updates.get("min_player_count", game.min_player_count)
         game.max_player_count = updates.get("max_player_count", game.max_player_count)
-        game.play_time = updates.get("play_time", game.play_time) # TODO: convert to time?
-        game.release_date = updates.get("release_date", game.release_date)  # TODO: convert to date?
+        game.play_time = updates.get(
+            "play_time", game.play_time
+        )  # TODO: convert to time?
+        game.release_date = updates.get(
+            "release_date", game.release_date
+        )  # TODO: convert to date?
         game.age = updates.get("age", game.age)
         game.weight = updates.get("weight", game.weight)
         game.genre = updates.get("genre", game.genre)
@@ -125,19 +133,23 @@ def update_game(game_id):
         game.image_link = updates.get("image_link", game.image_link)
         game.update()
 
-        games = (
-            BoardGame.query.order_by(BoardGame.id).all()
-        )
+        games = BoardGame.query.order_by(BoardGame.id).all()
         formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
 
         return jsonify(
-            {"success": True, "updated": review.id, "games": formatted_games, "total_games": len(games)}
+            {
+                "success": True,
+                "updated": game.id,
+                "games": formatted_games,
+                "total_games": len(games),
+            }
         )
     except:
         abort(422)
 
 
 @main.route("/games/<int:game_id>", methods=["DELETE"])
+@requires_auth("delete:games")
 def delete_game(game_id):
     game = BoardGame.query.filter_by(id=game_id).one_or_none()
 
@@ -185,6 +197,7 @@ def get_review_by_id(review_id):
 
 
 @main.route("/reviews", methods=["POST"])
+@requires_auth("post:reviews")
 def create_review():
     body = request.get_json()
 
@@ -193,7 +206,7 @@ def create_review():
             game_id=body.get("game_id"),
             review_text=body.get("review_text"),
             rating=body.get("rating"),
-            user_id=body.get("user_id"),
+            user_id=1,  # TODO:current_user(),
         )
         review.insert()
 
@@ -205,7 +218,12 @@ def create_review():
         formatted_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
         return jsonify(
-            {"success": True, "created": review.id, "reviews": formatted_reviews, "total_reviews_for_game": len(reviews)}
+            {
+                "success": True,
+                "created": review.id,
+                "reviews": formatted_reviews,
+                "total_reviews_for_game": len(reviews),
+            }
         )
 
     except:
@@ -213,6 +231,7 @@ def create_review():
 
 
 @main.route("/reviews/<int:review_id>", methods=["PATCH"])
+@requires_auth("patch:reviews")
 def update_review(review_id):
     review = Review.query.filter_by(id=review_id).one_or_none()
 
@@ -234,13 +253,19 @@ def update_review(review_id):
         formatted_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
         return jsonify(
-            {"success": True, "updated": review.id, "reviews": formatted_reviews, "total_reviews_for_game": len(reviews)}
+            {
+                "success": True,
+                "updated": review.id,
+                "reviews": formatted_reviews,
+                "total_reviews_for_game": len(reviews),
+            }
         )
     except:
         abort(422)
 
 
 @main.route("/reviews/<int:review_id>", methods=["DELETE"])
+@requires_auth("delete:reviews")
 def delete_review(review_id):
     review = Review.query.filter_by(id=review_id).one_or_none()
 
@@ -272,8 +297,11 @@ def get_reactions_for_review(review_id):
 
 
 @main.route("/reviews/<int:review_id>/reactions", methods=["PATCH"])
+@requires_auth("patch:reactions")
 def react_to_review(review_id):
     review = Review.query.filter_by(id=review_id).one_or_none()
+
+    # TODO: retrieve user information (have they previously liked this post)
 
     if review is None:
         abort(404)
@@ -353,6 +381,7 @@ def get_games_for_genre(genre_id):
 
 
 @main.route("/genres", methods=["POST"])
+@requires_auth("post:genres")
 def create_genre():
     body = request.get_json()
 
@@ -372,6 +401,7 @@ def create_genre():
 
 
 @main.route("/genres/<int:genre_id>", methods=["PATCH"])
+@requires_auth("patch:genres")
 def update_genre(genre_id):
     genre = Genre.query.filter_by(id=genre_id).one_or_none()
 
@@ -452,6 +482,7 @@ def get_games_for_publisher(publisher_id):
 
 
 @main.route("/publishers", methods=["POST"])
+@requires_auth("post:publishers")
 def create_publisher():
     body = request.get_json()
 
@@ -477,6 +508,7 @@ def create_publisher():
 
 
 @main.route("/publishers/<int:publisher_id>", methods=["PATCH"])
+@requires_auth("patch:publishers")
 def update_publisher(publisher_id):
     publisher = Publisher.query.filter_by(id=publisher_id).one_or_none()
 
@@ -562,6 +594,7 @@ def get_games_for_designer(designer_id):
 
 
 @main.route("/designers", methods=["POST"])
+@requires_auth("post:designers")
 def create_designer():
     body = request.get_json()
 
@@ -589,6 +622,7 @@ def create_designer():
 
 
 @main.route("/designers/<int:designer_id>", methods=["PATCH"])
+@requires_auth("patch:designers")
 def update_designer(designer_id):
     designer = Designer.query.filter_by(id=designer_id).one_or_none()
 
@@ -617,6 +651,16 @@ def update_designer(designer_id):
 
     except:
         abort(422)
+
+
+# ===========================
+#  User Endpoints
+# ===========================
+
+
+@main.route("users/<username>/reviews")
+def get_reviews_by_user(user_id):
+    return
 
 
 # ===========================
