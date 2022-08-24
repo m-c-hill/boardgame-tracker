@@ -1,7 +1,8 @@
 from flask import _app_ctx_stack, abort, jsonify, request
 from numpy import mean
 
-from app.models.models import BoardGame, Designer, Genre, Publisher, Review
+from app.models.board_game import BoardGame, Designer, Genre, Publisher
+from app.models.review import Review
 
 from ..utils.auth0 import requires_auth  # TODO: authorize_user, current_user
 from ..utils.requests import paginate_items

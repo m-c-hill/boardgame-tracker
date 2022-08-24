@@ -28,7 +28,10 @@ oauth.register(
 )
 
 
-from app.models.models import BoardGame, Designer, Genre, Publisher, Review, User
+# Import models
+from app.models.board_game import BoardGame, Designer, Genre, Publisher
+from app.models.user import User
+from app.models.review import Review
 
 
 def create_app(config_class: Config):

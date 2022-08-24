@@ -3,26 +3,10 @@ from enum import unique
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
 
 from app import db
-
-# Limits for review ratings
-MIN_RATING = 0
-MAX_RATING = 5
+from .crud_model import CRUDModel
 
 
-class CustomModel:
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-
-class BoardGame(db.Model, CustomModel):
+class BoardGame(db.Model, CRUDModel):
     __tablename__ = "board_games"
 
     id = Column(Integer, primary_key=True)
@@ -92,7 +76,7 @@ class BoardGame(db.Model, CustomModel):
         }
 
 
-class Genre(db.Model, CustomModel):
+class Genre(db.Model, CRUDModel):
     __tablename__ = "genres"
 
     id = Column(Integer, primary_key=True)
@@ -114,7 +98,7 @@ class Genre(db.Model, CustomModel):
         return {"id": self.id, "name": self.name, "description": self.description}
 
 
-class Designer(db.Model, CustomModel):
+class Designer(db.Model, CRUDModel):
     __tablename__ = "designers"
 
     id = Column(Integer, primary_key=True)
@@ -140,7 +124,7 @@ class Designer(db.Model, CustomModel):
         }
 
 
-class Publisher(db.Model, CustomModel):
+class Publisher(db.Model, CRUDModel):
     __tablename__ = "publishers"
 
     id = Column(Integer, primary_key=True)
@@ -158,64 +142,3 @@ class Publisher(db.Model, CustomModel):
 
     def format(self):
         return {"id": self.id, "name": self.name}
-
-
-class Review(db.Model, CustomModel):
-    __tablename__ = "reviews"
-
-    id = Column(Integer, primary_key=True)
-    board_game = Column(Integer, ForeignKey("board_games.id"))
-    review_text = Column(String(1000))
-    rating = Column(Integer)  # Rating out of 5 stars
-    user = Column(Integer, ForeignKey("users.id"))
-    likes = Column(Integer)
-    dislikes = Column(Integer)
-
-    def __init__(self, game_id, review_text, rating, user_id):
-        self.board_game = game_id
-        self.review_text = review_text
-        self.rating = (
-            MIN_RATING
-            if rating < MIN_RATING
-            else MAX_RATING
-            if rating > MAX_RATING
-            else rating
-        )
-        self.user = user_id
-        self.likes = 0
-        self.dislikes = 0
-
-    def __repr__(self):
-        return f"Review('ID':{self.board_game}, 'Rating': {self.rating})"
-
-    def __str__(self):
-        return f"ID: {self.id}, {self.rating}/5\n{self.review_text}"
-
-    def format(self):
-        return {
-            "id": self.id,
-            "user": self.user,
-            "game_id": self.board_game,
-            "rating": self.rating,
-            "review_text": self.review_text,
-        }
-
-
-class User(db.Model, CustomModel):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
-    auth0_id = Column(String(200), unique=True)
-    username = Column(String(50), unique=True)
-    email = Column(String(200), unique=True)
-    reviews = db.relationship("Review", backref="users", lazy=True)
-
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
-
-    def __repr__(self):
-        return f"User('{self.username}', '{self.email}')"
-
-    def __str__(self):
-        return self.username

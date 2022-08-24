@@ -1,14 +1,11 @@
-# TODO - https://realpython.com/token-based-authentication-with-flask/#route-setup
-
 from flask import url_for, session, redirect
 from urllib.parse import quote_plus, urlencode
 from os import environ as env
-import json
 
 from . import auth
 
 from app import oauth
-
+from ..models.user import User
 
 @auth.route("/")
 def home():
@@ -25,6 +22,10 @@ def login():
 
 @auth.route("/callback", methods=["GET", "POST"])
 def callback():
+    # TODO: check if user just registered
+    #   If they did, store the new user information
+    #
+
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
     return redirect("/auth/")
