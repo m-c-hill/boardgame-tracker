@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.types import ARRAY
 
 from app import db
 
@@ -17,9 +18,8 @@ class Review(db.Model, CRUDModel):
     review_text = Column(String(1000))
     rating = Column(Integer)  # Rating out of 5 stars
     user = Column(Integer, ForeignKey("users.id"))
-    # TODO add user likes/dislikes column (ARRAY)
-    likes = Column(Integer)
-    dislikes = Column(Integer)
+    likes = Column(ARRAY(String(200)))
+    dislikes = Column(ARRAY(String(200)))
 
     def __init__(self, game_id, review_text, rating, user_id):
         self.board_game = game_id
@@ -32,8 +32,8 @@ class Review(db.Model, CRUDModel):
             else rating
         )
         self.user = user_id
-        self._user_likes = []
-        self._user_dislikes = []
+        self._user_likes = set()
+        self._user_dislikes = set()
 
     @property
     def likes(self) -> int:
@@ -44,10 +44,14 @@ class Review(db.Model, CRUDModel):
         return len(self._user_dislikes)
 
     def like_post(self, user_id):
-        pass
+        if user_id in self._user_dislikes:
+            self._user_dislikes.remove(user_id)
+        self._user_likes.add(user_id)
 
     def dislike_review(self, user_id):
-        pass
+        if user_id in self._user_likes:
+            self._user_likes.remove(user_id)
+        self._user_dislikes.add(user_id)
 
     def __repr__(self):
         return f"Review('ID':{self.board_game}, 'Rating': {self.rating})"

@@ -32,8 +32,6 @@ def callback():
     """
     Call back route, accessed after the user has logged in through the auth0 portal
     """
-    # TODO: check if user just registered
-    #   If they did, store the new user information
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
     if not check_user_in_database():

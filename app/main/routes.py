@@ -1,10 +1,12 @@
-from flask import _app_ctx_stack, abort, jsonify, request
+from flask import abort, jsonify, request, session
 from numpy import mean
 
 from app.models.board_game import BoardGame, Designer, Genre, Publisher
 from app.models.review import Review
+from app.models.review import User
 
-from ..utils.auth0 import requires_auth  # TODO: authorize_user, current_user
+from ..utils.auth0 import requires_auth
+from ..utils.authentication import check_user_id, get_current_user_id
 from ..utils.requests import paginate_items
 from . import main
 
@@ -16,17 +18,24 @@ REVIEWS_PER_PAGE = 5
 #  Board Game Enpoints
 # ========================
 
-# TODO: sort_by/order_by request params: https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/
+
 @main.route("/games")
 def get_all_games():
     games = BoardGame.query.order_by(BoardGame.id).all()
     current_games = paginate_items(request, games, GAMES_PER_PAGE)
-    # TODO: add average rating for each game
 
     if not current_games:
         abort(404)
 
-    return jsonify({"success": True, "games": current_games, "total_games": len(games)})
+    games_with_avg_rating = []
+    for game in current_games:
+        reviews = Review.query.filter_by(board_game=game.id).all()
+        game["avg_rating"] = (
+            mean([r for r in game.rating]) if len(reviews) > 0 else None
+        )
+        games_with_avg_rating.append(game)
+
+    return jsonify({"success": True, "games": games_with_avg_rating, "total_games": len(games)})
 
 
 @main.route("/games/<int:game_id>")
@@ -207,7 +216,7 @@ def create_review():
             game_id=body.get("game_id"),
             review_text=body.get("review_text"),
             rating=body.get("rating"),
-            user_id=1,  # TODO:current_user(),
+            user_id=get_current_user_id(session),
         )
         review.insert()
 
@@ -239,8 +248,10 @@ def update_review(review_id):
     if review is None:
         abort(404)
 
-    updates = request.get_json()
+    if not check_user_id(review.user):
+        abort(401)
 
+    updates = request.get_json()
     try:
         review.review_text = updates.get("review_text", review.review_text)
         review.rating = updates.get("rating", review.rating)
@@ -273,6 +284,9 @@ def delete_review(review_id):
     if review is None:
         abort(404)
 
+    if not check_user_id(review.user):
+        abort(401)
+
     try:
         review.delete()
         return jsonify({"success": True, "deleted": review.id})
@@ -301,18 +315,20 @@ def get_reactions_for_review(review_id):
 @requires_auth("patch:reactions")
 def react_to_review(review_id):
     review = Review.query.filter_by(id=review_id).one_or_none()
-
-    # TODO: retrieve user information (have they previously liked this post)
+    user_id = get_current_user_id(session)
 
     if review is None:
         abort(404)
 
+    if not check_user_id(review.user):
+        abort(401)
+
     body = request.get_json()
     try:
         if body.get("like"):
-            review.likes += 1
+            review.like_post(user_id)
         elif body.get("dislikes"):
-            review.dislikes += 1
+            review.dislike_post(user_id)
         return jsonify(
             {
                 "success": True,
@@ -660,15 +676,43 @@ def update_designer(designer_id):
 
 
 @main.route("users/<username>/reviews")
-def get_reviews_by_user(user_id):
-    return
+def get_reviews_by_user(username):
+    user = User.query.filter_by(username=username).one_or_none()
+
+    if user is None:
+        abort(404)
+
+    reviews = Review.query.filter_by(user=user.id).all()
+    current_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
+
+    if not current_reviews:
+        abort(404)
+
+    return jsonify(
+        {"success": True, "username": user.name, "user_id": user.id, "reviews": current_reviews, "total_reviews_by_user": len(reviews)}
+    )
 
 
 # ===========================
 #  Search Endpoints
 # ===========================
 
-# TODO: design these endpoints
-# POST search for games by name
+@main.route("/search", methods=["POST"])
+def search_games():
+    body = request.get_json()
+    search_term = request.get_json().get("search_term", "")
+    
 
-# POST advanced search for games with filters
+    search_results = Question.query.filter(
+        Question.question.ilike(f"%{search_term}%")
+    ).all()
+    questions = [question.format() for question in search_results]
+
+    return jsonify(
+        {
+            "success": True,
+            "search_term": search_term,
+            "questions": questions,
+            "total_results": len(questions),
+        }
+    )
