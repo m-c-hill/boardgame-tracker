@@ -699,20 +699,18 @@ def get_reviews_by_user(username):
 
 @main.route("/search", methods=["POST"])
 def search_games():
-    body = request.get_json()
     search_term = request.get_json().get("search_term", "")
     
-
-    search_results = Question.query.filter(
-        Question.question.ilike(f"%{search_term}%")
+    search_results = BoardGame.query.filter(
+        BoardGame.title.ilike(f"%{search_term}%")
     ).all()
-    questions = [question.format() for question in search_results]
+    games = [game.format() for game in search_results]
 
     return jsonify(
         {
             "success": True,
             "search_term": search_term,
-            "questions": questions,
-            "total_results": len(questions),
+            "games": games,
+            "total_games": len(games),
         }
     )
