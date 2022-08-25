@@ -3,7 +3,8 @@ from numpy import mean
 
 from app.models.board_game import BoardGame, Designer, Genre, Publisher
 from app.models.review import Review
-from app.models.review import User
+from app.models.user import User
+from app.models.collection import Collection
 
 from ..utils.auth0 import requires_auth
 from ..utils.authentication import check_user_id, get_current_user_id
@@ -35,7 +36,9 @@ def get_all_games():
         )
         games_with_avg_rating.append(game)
 
-    return jsonify({"success": True, "games": games_with_avg_rating, "total_games": len(games)})
+    return jsonify(
+        {"success": True, "games": games_with_avg_rating, "total_games": len(games)}
+    )
 
 
 @main.route("/games/<int:game_id>")
@@ -101,13 +104,16 @@ def create_game():
         games = BoardGame.query.order_by(BoardGame.id).all()
         formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
 
-        return jsonify(
-            {
-                "success": True,
-                "created": game.id,
-                "games": formatted_games,
-                "total_games": len(games),
-            }
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "created": game.id,
+                    "games": formatted_games,
+                    "total_games": len(games),
+                }
+            ),
+            201,
         )
 
     except:
@@ -227,13 +233,16 @@ def create_review():
         )
         formatted_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
-        return jsonify(
-            {
-                "success": True,
-                "created": review.id,
-                "reviews": formatted_reviews,
-                "total_reviews_for_game": len(reviews),
-            }
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "created": review.id,
+                    "reviews": formatted_reviews,
+                    "total_reviews_for_game": len(reviews),
+                }
+            ),
+            201,
         )
 
     except:
@@ -329,6 +338,7 @@ def react_to_review(review_id):
             review.like_post(user_id)
         elif body.get("dislikes"):
             review.dislike_post(user_id)
+        review.update()
         return jsonify(
             {
                 "success": True,
@@ -339,6 +349,83 @@ def react_to_review(review_id):
         )
     except:
         abort(422)
+
+
+# =======================
+#  Collection Endpoints
+# =======================
+
+
+@main.route("/collections/<int:collection_id>/games")
+def get_games_in_collection(collection_id):
+    collection = Collection.query.filter_by(id=collection_id).one_or_none()
+
+    if collection is None:
+        abort(404)
+
+    if collection.private and not check_user_id(collection.user_id):
+        abort(401)
+
+    formatted_collection = collection.format()
+    formatted_games = [
+        BoardGame.query.filter_by(id=game_id).one().format()
+        for game_id in formatted_collection["games"]
+    ]
+    formatted_collection["games"] = formatted_games
+
+    return {
+        "success": True,
+        "collection": formatted_collection,
+        "total_games": len(formatted_games)
+    }
+
+
+@main.route("/collections/<int:collection_id>/games", methods=["PATCH"])
+@requires_auth("patch:collection")
+def update_collection(collection_id):
+    collection = Collection.query.filter_by(id=collection_id).one_or_none()
+
+    if collection is None:
+        abort(404)
+
+    if not check_user_id(collection.user_id):
+        abort(401)
+
+    try:
+        game_id = request.get_json()["game_id"]
+        action = request.get_json()["collection_action"]
+
+        if action == "add":
+            collection.add(game_id)
+        if action == "remove":
+            collection.remove(game_id)
+        collection.update()
+
+        return jsonify({"success": True, "collection_id": collection.id, "action": action, "game_id": game_id})
+
+    except:
+        abort(422)
+
+
+@main.route("/collections/<int:collection_id>/privacy", methods=["PATCH"])
+@requires_auth("patch:collection")
+def toggle_collection_privacy(collection_id):
+    collection = Collection.query.filter_by(id=collection_id).one_or_none()
+
+    if collection is None:
+        abort(404)
+
+    if not check_user_id(collection.user_id):
+        abort(401)
+
+    try:
+        collection.private = not collection.private
+        collection.update()
+        return jsonify({"success": True, "collection_id": collection.id, "private": collection.private})
+
+    except:
+        abort(422)
+
 
 
 # ========================
@@ -409,8 +496,9 @@ def create_genre():
         genres = Genre.query.order_by(Genre.id).all()
         formatted_genres = {genre.id: genre.name for genre in genres}
 
-        return jsonify(
-            {"success": True, "created": genre.id, "genres": formatted_genres}
+        return (
+            jsonify({"success": True, "created": genre.id, "genres": formatted_genres}),
+            201,
         )
 
     except:  # TODO: specific exception
@@ -512,12 +600,15 @@ def create_publisher():
             publisher.id: publisher.name for publisher in publishers
         }
 
-        return jsonify(
-            {
-                "success": True,
-                "created": publisher.id,
-                "publishers": formatted_publishers,
-            }
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "created": publisher.id,
+                    "publishers": formatted_publishers,
+                }
+            ),
+            201,
         )
 
     except:  # TODO: specific exception
@@ -543,12 +634,15 @@ def update_publisher(publisher_id):
             publisher.id: publisher.name for publishers in publishers
         }
 
-        return jsonify(
-            {
-                "success": True,
-                "updated": publisher.id,
-                "publishers": formatted_publishers,
-            }
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "updated": publisher.id,
+                    "publishers": formatted_publishers,
+                }
+            ),
+            201,
         )
     except:
         abort(422)
@@ -630,8 +724,15 @@ def create_designer():
             for designer in designers
         }
 
-        return jsonify(
-            {"success": True, "created": designer.id, "designers": formatted_designers}
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "created": designer.id,
+                    "designers": formatted_designers,
+                }
+            ),
+            201,
         )
 
     except:  # TODO: specific exception
@@ -675,21 +776,27 @@ def update_designer(designer_id):
 # ===========================
 
 
-@main.route("users/<username>/reviews")
+@main.route("users/<string:username>/reviews")
 def get_reviews_by_user(username):
     user = User.query.filter_by(username=username).one_or_none()
 
     if user is None:
         abort(404)
 
-    reviews = Review.query.filter_by(user=user.id).all()
+    reviews = Review.query.filter_by(user=user.auth0_id).all()
     current_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
     if not current_reviews:
         abort(404)
 
     return jsonify(
-        {"success": True, "username": user.name, "user_id": user.id, "reviews": current_reviews, "total_reviews_by_user": len(reviews)}
+        {
+            "success": True,
+            "username": user.name,
+            "user_id": user.auth0_id,
+            "reviews": current_reviews,
+            "total_reviews_by_user": len(reviews),
+        }
     )
 
 
@@ -697,10 +804,11 @@ def get_reviews_by_user(username):
 #  Search Endpoints
 # ===========================
 
+
 @main.route("/search", methods=["POST"])
 def search_games():
     search_term = request.get_json().get("search_term", "")
-    
+
     search_results = BoardGame.query.filter(
         BoardGame.title.ilike(f"%{search_term}%")
     ).all()

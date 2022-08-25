@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import session
 
-from authentication import get_current_user_id
+from ..utils.authentication import get_current_user_id
 from ..models.user import User
 
 
