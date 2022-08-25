@@ -5,6 +5,7 @@ import pytest
 from app import create_app
 
 
+# TODO: set up testing client and app
 @pytest.fixture()
 def client():
     app = create_app()

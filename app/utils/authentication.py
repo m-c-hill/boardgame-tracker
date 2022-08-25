@@ -1,7 +1,6 @@
 from flask import session
 
 
-# TODO: may not need to pass in session?
 def get_current_user_id(session: session) -> str:
     return session["user"]["userinfo"]["sub"].split("|")[-1]
 

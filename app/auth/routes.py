@@ -14,10 +14,12 @@ from ..utils.registration import (
 from . import auth
 
 
+# Dummy endpoint for development purposes to check if user is logged in
 @auth.route("/")
 def home():
-    user = session.get("user")
-    return f"current jwt: {user}"
+    if session.get("user"):
+        return "User logged in"
+    return "User logged out"
 
 
 @auth.route("/login")

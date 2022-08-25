@@ -2,10 +2,9 @@ from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String
 
-from .collection import Collection
-
 from app import db
 
+from .collection import Collection
 from .crud_model import CRUDModel
 
 
@@ -25,9 +24,9 @@ class User(db.Model, CRUDModel):
         self.username = username
         self.email = email
         self.updated_at = datetime.strptime(updated_at, "%Y-%m-%dT%H:%M:%S.%fZ")
-        new_collection = Collection(auth0_id)
-        new_collection.add()
-        self.collection = new_collection
+        # new_collection = Collection(auth0_id)
+        # new_collection.add()
+        self.collection = Collection(auth0_id)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"

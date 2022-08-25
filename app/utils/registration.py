@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import session
 
-from ..utils.authentication import get_current_user_id
 from ..models.user import User
+from ..utils.authentication import get_current_user_id
 
 
 def check_user_in_database() -> bool:

@@ -1,5 +1,6 @@
 import json
 from functools import wraps
+from os import environ as env
 from urllib.request import urlopen
 
 from flask import _app_ctx_stack, request
@@ -8,8 +9,8 @@ from jose import jwt
 from ..auth.errors import AuthError
 
 ALGORITHMS = ["RS256"]  # RSA using SHA256
-API_AUDIENCE = "boardgames"
-AUTH0_DOMAIN = ""  # TODO
+API_AUDIENCE = env.get("API_AUDIENCE")
+AUTH0_DOMAIN = env.get("AUTH0_DOMAIN")
 
 
 def get_token_auth_header():
@@ -150,13 +151,3 @@ def requires_auth(permission=""):
         return wrapper
 
     return requires_auth_decorator
-
-
-def current_user():
-    token = get_token_auth_header()
-    payload = verify_decode_jwt(token)
-    return payload["sub"]
-
-
-def authorize_user(user_id: str):
-    return current_user == user_id
