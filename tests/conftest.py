@@ -3,9 +3,9 @@ import os
 import pytest
 
 from app import create_app
-
 from app.models.collection import Collection
 from app.models.review import Review
+
 
 # TODO: set up testing client and app
 @pytest.fixture()
@@ -29,17 +29,21 @@ def client():
 #  Model fixtures
 # =======================
 
+
 @pytest.fixture()
 def collection():
     return Collection(user_id=1)
+
 
 @pytest.fixture()
 def game_id():
     return 1
 
+
 @pytest.fixture
 def user_id():
     return 1
+
 
 @pytest.fixture
 def review():

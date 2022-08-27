@@ -3,7 +3,7 @@ from functools import wraps
 from os import environ as env
 from urllib.request import urlopen
 
-from flask import _app_ctx_stack, request
+from flask import request, session
 from jose import jwt
 
 from ..auth.errors import AuthError
@@ -32,11 +32,17 @@ def get_token_auth_header():
     return auth_header.split(" ")[1]
 
 
-def _validate_bearer_token(header):
+def _validate_bearer_token(header) -> bool:
     """
     Helper function to check if the string 'bearer' preceeds the auth token
     """
     header_parts = header.split(" ")
+
+    if header_parts[0].lower() != "bearer":
+        raise AuthError(
+            {"code": "invalid_header", "description": "The prefix has to be 'Bearer'."},
+            401,
+        )
 
     if len(header_parts) != 2:
         raise AuthError(
@@ -47,14 +53,10 @@ def _validate_bearer_token(header):
             401,
         )
 
-    if header_parts[0].lower() != "bearer":
-        raise AuthError(
-            {"code": "invalid_header", "description": "The prefix has to be 'Bearer'."},
-            401,
-        )
+    return True
 
 
-def check_permissions(permission, payload):
+def check_permissions(permission, payload) -> bool:
     """
     Check the permissions list in the JWT payload contains the required permission.
     """
@@ -72,14 +74,22 @@ def check_permissions(permission, payload):
             {"code": "unauthorized", "description": "Permission not found"}, 403
         )
 
+    return True
 
-def verify_decode_jwt(token):
+
+def _retrieve_jwks():
+    # auth0 jwks docs: https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-key-sets
+    jwks_url = urlopen(f"https://{AUTH0_DOMAIN}/.well-known/jwks.json")
+    return json.loads(jwks_url.read())  # json web key set
+
+
+
+def verify_decode_jwt(token) -> bool:
     """
     Decode the jwt token using RSA with SHA256 algorithm
     """
-    # auth0 jwks docs: https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-key-sets
-    jwks_url = urlopen(f"https://{AUTH0_DOMAIN}/.well-known/jwks.json")
-    jwks = json.loads(jwks_url.read())  # json web key set
+
+    jwks = _retrieve_jwks()
 
     # jwt lib docs: https://pyjwt.readthedocs.io/en/stable/usage.html
     unverified_header = jwt.get_unverified_header(token)
@@ -144,7 +154,7 @@ def requires_auth(permission=""):
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
-            _app_ctx_stack.top.current_user = payload
+            # session["user"] = payload
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
 

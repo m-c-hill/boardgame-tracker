@@ -1,7 +1,6 @@
 import pytest
 
 from app.models.collection import Collection
-from app.models.board_game import BoardGame
 
 
 def test_create_collection():

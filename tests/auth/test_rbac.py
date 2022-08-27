@@ -5,8 +5,17 @@ Users can write reviews, so can admins
 Admins can create board games, users cannot
 """
 
-# TODO: test user can submit review
-# TODO: test admin can submit review
+def test_user_can_submit_review():
+    pass
 
-# TODO: test user cannot add board game
-# TODO: test admin can add board game
+
+def test_admin_cannot_submit_review():
+    pass
+
+
+def test_user_cannot_add_game():
+    pass
+
+
+def test_admin_can_add_game():
+    pass
