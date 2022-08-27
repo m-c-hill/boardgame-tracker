@@ -9,6 +9,11 @@ from .. import main
 from . import GAMES_PER_PAGE, REVIEWS_PER_PAGE
 
 
+@main.route("/")
+def home():
+    return "Board Game Tracker"
+
+
 @main.route("/games")
 def get_all_games():
     games = BoardGame.query.order_by(BoardGame.id).all()
@@ -30,47 +35,47 @@ def get_all_games():
     )
 
 
-# @main.route("/games/<int:game_id>")
-# def get_game_by_id(game_id):
-#     game = BoardGame.query.filter_by(id=game_id)
+@main.route("/games/<int:game_id>")
+def get_game_by_id(game_id):
+    game = BoardGame.query.filter_by(id=game_id)
 
-#     reviews_for_game = Review.query.filter_by(board_game=game_id).all()
-#     average_rating = (
-#         mean([r.rating for r in reviews_for_game]) if reviews_for_game else None
-#     )
+    reviews_for_game = Review.query.filter_by(board_game=game_id).all()
+    average_rating = (
+        mean([r.rating for r in reviews_for_game]) if reviews_for_game else None
+    )
 
-#     if game is None:
-#         abort(404)
+    if game is None:
+        abort(404)
 
-#     return jsonify(
-#         {"success": True, "game": game.format(), "average_rating": average_rating}
-#     )
+    return jsonify(
+        {"success": True, "game": game.format(), "average_rating": average_rating}
+    )
 
 
-# @main.route("/games/<int:game_id>/reviews")
-# def get_reviews_for_game(game_id):
-#     game = BoardGame.query.filter_by(id=game_id).one_or_none()
-#     if game is None:
-#         abort(404)
+@main.route("/games/<int:game_id>/reviews")
+def get_reviews_for_game(game_id):
+    game = BoardGame.query.filter_by(id=game_id).one_or_none()
+    if game is None:
+        abort(404)
 
-#     reviews_for_game = Review.query.filter_by(board_game=game_id).all()
+    reviews_for_game = Review.query.filter_by(board_game=game_id).all()
 
-#     if reviews_for_game:
-#         average_rating = mean([r.rating for r in reviews_for_game])
-#     else:
-#         average_rating = None
+    if reviews_for_game:
+        average_rating = mean([r.rating for r in reviews_for_game])
+    else:
+        average_rating = None
 
-#     reviews = paginate_items(request, reviews_for_game, REVIEWS_PER_PAGE)
+    reviews = paginate_items(request, reviews_for_game, REVIEWS_PER_PAGE)
 
-#     return jsonify(
-#         {
-#             "success": True,
-#             "game_id": game_id,
-#             "reviews": reviews,
-#             "average_rating": average_rating,
-#             "total_review": len(reviews_for_game),
-#         }
-#     )
+    return jsonify(
+        {
+            "success": True,
+            "game_id": game_id,
+            "reviews": reviews,
+            "average_rating": average_rating,
+            "total_review": len(reviews_for_game),
+        }
+    )
 
 
 @main.route("/games", methods=["POST"])
@@ -114,66 +119,66 @@ def create_game():
         abort(422)
 
 
-# @main.route("/games/<int:game_id>", methods=["PATCH"])
-# @requires_auth("patch:games")
-# def update_game(game_id):
-#     game = BoardGame.query.filter_by(id=game_id).one_or_none()
+@main.route("/games/<int:game_id>", methods=["PATCH"])
+@requires_auth("patch:games")
+def update_game(game_id):
+    game = BoardGame.query.filter_by(id=game_id).one_or_none()
 
-#     if game is None:
-#         abort(404)
+    if game is None:
+        abort(404)
 
-#     updates = request.get_json()
+    updates = request.get_json()
 
-#     try:
-#         game.title = updates.get("title", game.title)
-#         game.description = updates.get("description", game.description)
-#         game.min_player_count = updates.get("min_player_count", game.min_player_count)
-#         game.max_player_count = updates.get("max_player_count", game.max_player_count)
-#         play_time_str = updates.get("play_time_minutes", game.play_time)
-#         game.play_time_minutes = datetime.strptime(
-#             updated_at, "%Y-%m-%dT%H:%M:%S.%fZ"
-#         )  # TODO: convert to time?
-#         game.release_date = updates.get(
-#             "release_date", game.release_date
-#         )  # TODO: convert to date?
-#         game.age = updates.get("age", game.age)
-#         game.weight = updates.get("weight", game.weight)
-#         game.genre = updates.get("genre", game.genre)
-#         game.designer = updates.get("designer", game.designer)
-#         game.publisher = updates.get("publisher", game.publisher)
-#         game.image_link = updates.get("image_link", game.image_link)
-#         game.update()
+    try:
+        game.title = updates.get("title", game.title)
+        game.description = updates.get("description", game.description)
+        game.min_player_count = updates.get("min_player_count", game.min_player_count)
+        game.max_player_count = updates.get("max_player_count", game.max_player_count)
+        play_time_str = updates.get("play_time_minutes", game.play_time)
+        game.play_time_minutes = "" #datetime.strptime(
+        #     updated_at, "%Y-%m-%dT%H:%M:%S.%fZ"
+        # )  # TODO: convert to time?
+        game.release_date = updates.get(
+            "release_date", game.release_date
+        )  # TODO: convert to date?
+        game.age = updates.get("age", game.age)
+        game.weight = updates.get("weight", game.weight)
+        game.genre = updates.get("genre", game.genre)
+        game.designer = updates.get("designer", game.designer)
+        game.publisher = updates.get("publisher", game.publisher)
+        game.image_link = updates.get("image_link", game.image_link)
+        game.update()
 
-#         games = BoardGame.query.order_by(BoardGame.id).all()
-#         formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
+        games = BoardGame.query.order_by(BoardGame.id).all()
+        formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
 
-#         return jsonify(
-#             {
-#                 "success": True,
-#                 "updated": game.id,
-#                 "games": formatted_games,
-#                 "total_games": len(games),
-#             }
-#         )
-#     except:
-#         abort(422)
+        return jsonify(
+            {
+                "success": True,
+                "updated": game.id,
+                "games": formatted_games,
+                "total_games": len(games),
+            }
+        )
+    except:
+        abort(422)
 
 
-# @main.route("/games/<int:game_id>", methods=["DELETE"])
-# @requires_auth("delete:games")
-# def delete_game(game_id):
-#     game = BoardGame.query.filter_by(id=game_id).one_or_none()
+@main.route("/games/<int:game_id>", methods=["DELETE"])
+@requires_auth("delete:games")
+def delete_game(game_id):
+    game = BoardGame.query.filter_by(id=game_id).one_or_none()
 
-#     if game is None:
-#         abort(404)
+    if game is None:
+        abort(404)
 
-#     reviews = Review.query.filter_by(board_game=game_id).all()
+    reviews = Review.query.filter_by(board_game=game_id).all()
 
-#     try:
-#         for review in reviews:
-#             review.delete()
-#         game.delete()
+    try:
+        for review in reviews:
+            review.delete()
+        game.delete()
 
-#         return jsonify({"success": True, "deleted": game.id})
-#     except:
-#         abort(422)
+        return jsonify({"success": True, "deleted": game.id})
+    except:
+        abort(422)

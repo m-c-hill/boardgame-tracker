@@ -1,19 +1,17 @@
 import pytest
 
 from app.auth.errors import AuthError
-
-
 from app.utils.auth0 import (
     _validate_bearer_token,
     check_permissions,
-    verify_decode_jwt,
     requires_auth,
+    verify_decode_jwt,
 )
-
 
 # ===========
 #  Fixtures
 # ===========
+
 
 @pytest.fixture()
 def jwks() -> dict:
@@ -68,8 +66,9 @@ def token_decoded() -> dict:
         "iat": 1661626624,
         "exp": 1661713024,
         "sid": "G6SYsjX5FbSbPPk8g81kXyP00iQrGI-Q",
-        "nonce": "AxOTz8tTWYGr5jha1FUh"
-        }
+        "nonce": "AxOTz8tTWYGr5jha1FUh",
+    }
+
 
 # ===========
 #  Tests

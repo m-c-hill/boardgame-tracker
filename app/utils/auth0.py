@@ -83,7 +83,6 @@ def _retrieve_jwks():
     return json.loads(jwks_url.read())  # json web key set
 
 
-
 def verify_decode_jwt(token) -> bool:
     """
     Decode the jwt token using RSA with SHA256 algorithm
