@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import session
 
+from ..models.collection import Collection
 from ..models.user import User
 from ..utils.authentication import get_current_user_id
 
@@ -20,6 +21,9 @@ def register_user() -> None:
 
     new_user = User(auth0_id, username, email, updated_at)
     new_user.insert()
+
+    new_collection = Collection(new_user.id)
+    new_collection.insert()
 
 
 def user_info_needs_updating() -> bool:

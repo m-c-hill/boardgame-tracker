@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Time
 
 from app import db
@@ -13,7 +15,7 @@ class BoardGame(db.Model, CRUDModel):
     description = Column(String(250))
     min_player_count = Column(Integer)
     max_player_count = Column(Integer)
-    play_time = Column(Time)
+    play_time_minutes = Column(Integer)
     release_date = Column(Date)
     age = Column(Integer)
     weight = Column(Float)
@@ -29,7 +31,7 @@ class BoardGame(db.Model, CRUDModel):
         description,
         min_player_count,
         max_player_count,
-        play_time,
+        play_time_minutes,
         release_date,
         age,
         weight,
@@ -42,8 +44,8 @@ class BoardGame(db.Model, CRUDModel):
         self.description = description
         self.min_player_count = min_player_count
         self.max_player_count = max_player_count
-        self.play_time = play_time
-        self.release_date = release_date
+        self.play_time_minutes = play_time_minutes
+        self.release_date = datetime.strptime(release_date, "%Y-%m-%d").date()
         self.age = age
         self.weight = weight
         self.genre = genre_id
@@ -64,7 +66,7 @@ class BoardGame(db.Model, CRUDModel):
             "description": self.description,
             "min_player_count": self.min_player_count,
             "max_player_count": self.max_player_count,
-            "play_time": self.play_time,
+            "play_time_minutes": self.play_time_minutes,
             "release_date": self.release_date,
             "age": self.age,
             "weight": self.weight,

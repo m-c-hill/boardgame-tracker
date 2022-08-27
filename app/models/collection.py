@@ -11,7 +11,6 @@ class Collection(db.Model, CRUDModel):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = db.relationship("User", back_populates="collection")
     games = Column(ARRAY(Integer))  # IDs of games in the collection
     private = Column(Boolean)
 
@@ -30,8 +29,11 @@ class Collection(db.Model, CRUDModel):
         self.games.add(game_id)
 
     def remove(self, game_id: str) -> None:
-        if game_id in self.games:
+        if self.includes_game(game_id):
             self.games.remove(game_id)
+
+    def includes_game(self, game_id) -> bool:
+        return game_id in self.games
 
     def format(self) -> dict:
         return {

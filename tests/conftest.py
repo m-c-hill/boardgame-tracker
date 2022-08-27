@@ -4,6 +4,8 @@ import pytest
 
 from app import create_app
 
+from app.models.collection import Collection
+from app.models.review import Review
 
 # TODO: set up testing client and app
 @pytest.fixture()
@@ -21,3 +23,29 @@ def client():
     # insert_dummy_data()  # Populate database with test data
     yield app.test_client()
     # db.drop_all()
+
+
+# =======================
+#  Model fixtures
+# =======================
+
+@pytest.fixture()
+def collection():
+    return Collection(user_id=1)
+
+@pytest.fixture()
+def game_id():
+    return 1
+
+@pytest.fixture
+def user_id():
+    return 1
+
+@pytest.fixture
+def review():
+    return Review(
+        game_id=1,
+        review_text="",
+        rating=5,
+        user_id=1,
+    )

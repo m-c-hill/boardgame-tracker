@@ -18,8 +18,8 @@ class Review(db.Model, CRUDModel):
     review_text = Column(String(1000))
     rating = Column(Integer)  # Rating out of 5 stars
     user = Column(Integer, ForeignKey("users.id"))
-    likes = Column(ARRAY(String(200)))
-    dislikes = Column(ARRAY(String(200)))
+    likes = Column(Integer)
+    dislikes = Column(Integer)
 
     def __init__(self, game_id, review_text, rating, user_id):
         self.board_game = game_id
@@ -43,7 +43,7 @@ class Review(db.Model, CRUDModel):
     def dislikes(self) -> int:
         return len(self._user_dislikes)
 
-    def like_post(self, user_id):
+    def like_review(self, user_id):
         if user_id in self._user_dislikes:
             self._user_dislikes.remove(user_id)
         self._user_likes.add(user_id)
