@@ -33,7 +33,7 @@ def get_games_in_collection(collection_id):
 
 
 @main.route("/collections/<int:collection_id>/games", methods=["PATCH"])
-@requires_auth("patch:collection")
+# @requires_auth("patch:collection")  #TODO: uncomment
 def update_collection(collection_id):
     collection = Collection.query.filter_by(id=collection_id).one_or_none()
 
@@ -45,7 +45,7 @@ def update_collection(collection_id):
 
     try:
         game_id = request.get_json()["game_id"]
-        action = request.get_json()["collection_action"]
+        action = request.get_json()["action"]
 
         if action == "add":
             collection.add(game_id)

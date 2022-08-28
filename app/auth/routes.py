@@ -35,7 +35,6 @@ def callback():
     Call back route, accessed after the user has logged in through the auth0 portal
     """
     token = oauth.auth0.authorize_access_token()
-    breakpoint()
     session["user"] = token
     if not check_user_in_database():
         register_user()

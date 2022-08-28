@@ -135,7 +135,7 @@ def update_game(game_id):
         game.min_player_count = updates.get("min_player_count", game.min_player_count)
         game.max_player_count = updates.get("max_player_count", game.max_player_count)
         play_time_str = updates.get("play_time_minutes", game.play_time)
-        game.play_time_minutes = "" #datetime.strptime(
+        game.play_time_minutes = ""  # datetime.strptime(
         #     updated_at, "%Y-%m-%dT%H:%M:%S.%fZ"
         # )  # TODO: convert to time?
         game.release_date = updates.get(

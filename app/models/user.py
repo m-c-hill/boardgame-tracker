@@ -4,7 +4,6 @@ from sqlalchemy import Column, DateTime, Integer, String
 
 from app import db
 
-from .collection import Collection
 from .crud_model import CRUDModel
 
 

@@ -18,19 +18,21 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: categories; Type: TABLE; Schema: public; Owner: student
+-- Name: categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.categories (
-    id integer NOT NULL,
-    type text
+ CREATE TABLE public.users (                                       +
+    id integer DEFAULT nextval('users_id_seq'::regclass) NOT NULL,+
+    auth0_id text,
+    username text,
+    email text,
+    updated_at timestamp without time zone,
 );
 
-
-ALTER TABLE public.categories OWNER TO student;
+ALTER TABLE public.categories OWNER TO postgres;
 
 --
--- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: student
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.categories_id_seq
