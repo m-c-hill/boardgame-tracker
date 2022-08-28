@@ -1,4 +1,4 @@
-from app.models.board_game import Designer, Genre, BoardGame, Publisher
+from app.models.board_game import BoardGame, Designer, Genre, Publisher
 from app.models.collection import Collection
 from app.models.review import Review
 from app.models.user import User
@@ -175,13 +175,17 @@ def _insert_users():
 
 
 def _insert_reviews():
+    review_1 = Review(
+        1,
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        5,
+        1,
+    )
+    review_1._user_likes = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+    review_1._user_dislikes = set([10, 11, 12])
+
     reviews = [
-        Review(
-            1,
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            5,
-            1,
-        ),
+        review_1,
         Review(
             2,
             "Lectus vestibulum mattis ullamcorper velit sed ullamcorper.",
@@ -225,7 +229,14 @@ def _insert_reviews():
 
 
 def _insert_collection():
-    collections = [Collection(1), Collection(2)]
+    collection_1 = Collection(1)
+    collection_1.add(1)
+    collection_1.add(2)
+    collection_1.add(3)
+    collection_2 = Collection(2)
+    collection_2.add(2)
+    collection_2.add(6)
+    collections = [collection_1, collection_2]
 
     for collection in collections:
         collection.insert()

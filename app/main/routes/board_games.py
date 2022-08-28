@@ -24,9 +24,9 @@ def get_all_games():
 
     games_with_avg_rating = []
     for game in current_games:
-        reviews = Review.query.filter_by(board_game=game.id).all()
+        reviews = Review.query.filter_by(board_game=game["id"]).all()
         game["avg_rating"] = (
-            mean([r for r in game.rating]) if len(reviews) > 0 else None
+            mean([r.rating for r in reviews]) if len(reviews) > 0 else None
         )
         games_with_avg_rating.append(game)
 
@@ -37,15 +37,15 @@ def get_all_games():
 
 @main.route("/games/<int:game_id>")
 def get_game_by_id(game_id):
-    game = BoardGame.query.filter_by(id=game_id)
+    game = BoardGame.query.filter_by(id=game_id).one_or_none()
+
+    if game is None:
+        abort(404)
 
     reviews_for_game = Review.query.filter_by(board_game=game_id).all()
     average_rating = (
         mean([r.rating for r in reviews_for_game]) if reviews_for_game else None
     )
-
-    if game is None:
-        abort(404)
 
     return jsonify(
         {"success": True, "game": game.format(), "average_rating": average_rating}

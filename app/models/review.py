@@ -20,6 +20,8 @@ class Review(db.Model, CRUDModel):
     user = Column(Integer, ForeignKey("users.id"))
     likes = Column(Integer)
     dislikes = Column(Integer)
+    _user_likes = Column(ARRAY(Integer))
+    _user_dislikes = Column(ARRAY(Integer))
 
     def __init__(self, game_id, review_text, rating, user_id):
         self.board_game = game_id
@@ -32,8 +34,8 @@ class Review(db.Model, CRUDModel):
             else rating
         )
         self.user = user_id
-        self._user_likes = set()
-        self._user_dislikes = set()
+        self._user_likes = set([])
+        self._user_dislikes = set([])
 
     @property
     def likes(self) -> int:

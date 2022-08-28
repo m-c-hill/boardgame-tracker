@@ -13,7 +13,7 @@ def test_get_all_reviews_pagination(client, all_reviews_page_two):
 def test_get_all_reviews_pagination_raises_not_found_error(client, not_found_error):
     response = client.get("/api/reviews", query_string={"page": 666})
     assert response.status_code == 404
-    assert response == not_found_error
+    assert response.get_json() == not_found_error
 
 
 def test_get_review_by_id(client, review_1):
@@ -22,6 +22,7 @@ def test_get_review_by_id(client, review_1):
     assert response.get_json() == review_1
 
 
+# TODO
 def test_create_review(client, mocker):
     mocker.patch("app.main.routes.reviews.get_current_user_id", return_value=1)
     response = client.post("/api/reviews", json={})  # TODO
@@ -29,6 +30,7 @@ def test_create_review(client, mocker):
     assert response.get_json() == ""  # TODO
 
 
+# TODO
 def test_update_review(client, mocker):
     mocker.patch("app.main.routes.reviews.check_user_id", return_value=True)
     response = client.patch("/api/reviews/1", json={})  # TODO
@@ -36,6 +38,7 @@ def test_update_review(client, mocker):
     assert response.get_json() == ""  # TODO
 
 
+# TODO
 def test_delete_review(client, mocker):
     mocker.patch("app.main.routes.reviews.check_user_id", return_value=True)
     response = client.delete("/api/reviews/3")
@@ -54,6 +57,7 @@ def test_get_reactions_for_review(client):
     }
 
 
+# TODO (auth)
 def test_like_review(client):
     response = client.patch("/api/reviews/2/reactions", json={"like": True})
     assert response.status_code == 200
@@ -65,7 +69,8 @@ def test_like_review(client):
     }
 
 
-def test_like_review(client):
+# TODO (auth)
+def test_dislike_review(client):
     response = client.patch("/api/reviews/2/reactions", json={"dislike": True})
     assert response.status_code == 200
     assert response.get_json() == {

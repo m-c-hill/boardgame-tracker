@@ -10,7 +10,7 @@ from . import REVIEWS_PER_PAGE
 
 @main.route("/reviews")
 def get_all_reviews():
-    reviews = Review.query.all()
+    reviews = Review.query.order_by(Review.id).all()
     current_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
     if not current_reviews:
@@ -28,9 +28,10 @@ def get_review_by_id(review_id):
     if review is None:
         abort(404)
 
-    return jsonify({"success": True, "review": review})
+    return jsonify({"success": True, "review": review.format()})
 
 
+# TODO: if user already left review for game, then overwrite current review
 @main.route("/reviews", methods=["POST"])
 @requires_auth("post:reviews")
 def create_review():

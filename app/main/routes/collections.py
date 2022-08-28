@@ -33,7 +33,7 @@ def get_games_in_collection(collection_id):
 
 
 @main.route("/collections/<int:collection_id>/games", methods=["PATCH"])
-# @requires_auth("patch:collection")  #TODO: uncomment
+@requires_auth("patch:collection")
 def update_collection(collection_id):
     collection = Collection.query.filter_by(id=collection_id).one_or_none()
 

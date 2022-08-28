@@ -67,7 +67,7 @@ class BoardGame(db.Model, CRUDModel):
             "min_player_count": self.min_player_count,
             "max_player_count": self.max_player_count,
             "play_time_minutes": self.play_time_minutes,
-            "release_date": self.release_date,
+            "release_date": datetime.strftime(self.release_date, "%Y-%m-%d"),
             "age": self.age,
             "weight": self.weight,
             "genre": self.genre,

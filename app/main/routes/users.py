@@ -14,13 +14,13 @@ def get_reviews_by_user(username):
     if user is None:
         abort(404)
 
-    reviews = Review.query.filter_by(user=user.auth0_id).all()
+    reviews = Review.query.filter_by(user=user.id).all()
     current_reviews = paginate_items(request, reviews, REVIEWS_PER_PAGE)
 
     return jsonify(
         {
             "success": True,
-            "username": user.name,
+            "username": user.username,
             "user_id": user.auth0_id,
             "reviews": current_reviews,
             "total_reviews_by_user": len(reviews),
