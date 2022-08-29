@@ -6,6 +6,7 @@ from .routes import (
     board_games,
     collections,
     designers,
+    docs,
     genres,
     publishers,
     reviews,

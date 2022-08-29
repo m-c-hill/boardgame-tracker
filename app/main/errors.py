@@ -1,9 +1,11 @@
 from flask import jsonify
 
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
+
 
 def register_error_handlers(app):
     @app.errorhandler(AuthError)
@@ -23,11 +25,9 @@ def register_error_handlers(app):
     def resource_not_found(error):
         return jsonify({"success": False, "error": 400, "message": "Bad request"}), 400
 
-
     @app.errorhandler(404)
     def resource_not_found(error):
         return jsonify({"success": False, "error": 404, "message": "Not found"}), 404
-
 
     @app.errorhandler(422)
     def unprocessable(error):
@@ -35,7 +35,6 @@ def register_error_handlers(app):
             jsonify({"success": False, "error": 422, "message": "Unprocessable"}),
             422,
         )
-
 
     @app.errorhandler(500)
     def unprocessable(error):

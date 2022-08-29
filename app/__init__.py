@@ -1,5 +1,5 @@
-from os import environ as env
 import os
+from os import environ as env
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
@@ -29,12 +29,14 @@ oauth.register(
 )
 
 
+from app.config import config
+
 # Import models
 from app.models.board_game import BoardGame, Designer, Genre, Publisher
 from app.models.collection import Collection
 from app.models.review import Review
 from app.models.user import User
-from app.config import config
+
 
 def create_app(config_name: str = os.getenv("FLASK_CONFIG") or "default"):
     """
@@ -52,11 +54,13 @@ def create_app(config_name: str = os.getenv("FLASK_CONFIG") or "default"):
         oauth.init_app(app)
 
         from .main.errors import register_error_handlers
+
         register_error_handlers(app)
 
         # TODO: temporary to seed database with initial data. Remove in future.
         try:
             from tests.db_test_data import insert_test_data
+
             insert_test_data()
         except:
             pass
@@ -68,5 +72,9 @@ def create_app(config_name: str = os.getenv("FLASK_CONFIG") or "default"):
     from .auth import auth as auth_blueprint
 
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
+
+    from .swagger import swaggerui_blueprint
+
+    app.register_blueprint(swaggerui_blueprint)
 
     return app

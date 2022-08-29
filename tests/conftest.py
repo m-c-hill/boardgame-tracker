@@ -1,10 +1,10 @@
 import pytest
 
 from app import create_app, db
+from app.config import config
 from app.models.board_game import BoardGame
 from app.models.collection import Collection
 from app.models.review import Review
-from app.config import config
 from tests.db_test_data import insert_test_data
 
 # =======================
