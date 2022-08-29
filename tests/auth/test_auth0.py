@@ -1,6 +1,6 @@
 import pytest
 
-from app.auth.errors import AuthError
+from app.main.errors import AuthError
 from app.utils.auth0 import (
     _validate_bearer_token,
     check_permissions,
@@ -43,12 +43,6 @@ def jwks() -> dict:
             },
         ]
     }
-
-
-# TODO get actual token with permissions
-@pytest.fixture()
-def token() -> str:
-    return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikk3WDFuRUx3RmttdzVwWDNPZ1hSWSJ9.eyJuaWNrbmFtZSI6InVzZXIiLCJuYW1lIjoidXNlciIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci8wMGZkYjRhZjk0YzEzOWVlOTFmNGRhNjZhNTc1MjY3Yj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnVzLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDIyLTA4LTI3VDE4OjU3OjA0LjE4OFoiLCJlbWFpbCI6InVzZXJAZ2FtZXMuaW8iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXQtMGxhMWloLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2MzA2MzkwMDdmZWEzMzlmOTkzMWY5MjEiLCJhdWQiOiJGaDNPaXh3dlFXTUMwWGxsRGJLOWFRT2twUW9aM1lJcCIsImlhdCI6MTY2MTYyNjYyNCwiZXhwIjoxNjYxNzEzMDI0LCJzaWQiOiJHNlNZc2pYNUZiU2JQUGs4Zzgxa1h5UDAwaVFyR0ktUSIsIm5vbmNlIjoiQXhPVHo4dFRXWUdyNWpoYTFGVWgifQ.QQBV-Ty1rp3Zk6n8IVCfoNmtgH1E165OtsDeCAHRRfg8mYhJRJn3iMFj9KWCLsYYProo6CpwfglZweSphWn93Cobky1k2J2gcj5xbBC9PweESkfkx8JOSBYiex8ios1nQf8vuqriREIcMjtcFHjTtuApiOIfvupwQoTWQTclClXRyf_0qPE38glVJkwzNj2WiEOd19oO9L9Q5ThTOB86Rlv63_r6Dmc5Vd4IYWLTyVLByJy99eAXp01W-TpbUX8xpSlqXapTr3rVlJf-8Y1lX13BztrS4E7WEdwqBH4-86duGL5Y_iZdtmu9TfuiWmiizuCSoILt2jjtyEgQD_AOzw"
 
 
 @pytest.fixture()
@@ -117,9 +111,7 @@ def test_check_permissions_raises_auth_error_missing_permission():
         check_permissions("patch:genres", payload)
 
 
-# TODO
-
-# def test_verify_decode_jwt(mocker, jwks, token):  # TODO: (mock jwks)
+# def test_verify_decode_jwt(mocker, jwks, token):
 #     mocker.patch(
 #         "app.utils.auth0._retrieve_jwks",
 #         return_value=jwks,

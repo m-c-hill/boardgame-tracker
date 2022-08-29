@@ -75,7 +75,7 @@ def create_genre():
             201,
         )
 
-    except:  # TODO: specific exception
+    except:
         abort(422)
 
 

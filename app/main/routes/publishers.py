@@ -83,7 +83,7 @@ def create_publisher():
             201,
         )
 
-    except:  # TODO: specific exception
+    except:
         abort(422)
 
 

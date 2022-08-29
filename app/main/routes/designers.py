@@ -91,7 +91,7 @@ def create_designer():
             201,
         )
 
-    except:  # TODO: specific exception
+    except:
         abort(422)
 
 

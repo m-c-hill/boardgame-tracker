@@ -4,7 +4,7 @@ from app import create_app, db
 from app.models.board_game import BoardGame
 from app.models.collection import Collection
 from app.models.review import Review
-from config import config
+from app.config import config
 from tests.db_test_data import insert_test_data
 
 # =======================
@@ -14,8 +14,7 @@ from tests.db_test_data import insert_test_data
 
 @pytest.fixture(scope="function")
 def app():
-    app_config = config["testing"]
-    app = create_app(app_config)
+    app = create_app("testing")
 
     with app.app_context():
         db.drop_all()

@@ -11,7 +11,6 @@ def test_get_all_games_raises_exception_no_collection(client, not_found_error):
     assert response.get_json() == not_found_error
 
 
-# TODO: similar issue with list
 def test_add_game_to_collection(client, mocker):
     mocker.patch("app.main.routes.collections.check_user_id", return_value=True)
     mocker.patch(

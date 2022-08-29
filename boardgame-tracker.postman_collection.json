@@ -1,0 +1,424 @@
+{
+	"info": {
+		"_postman_id": "ab3b31b8-4cd7-4bea-b3e0-e4f7023f36f6",
+		"name": "boardgame-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains games array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.games).to.be.an('array')",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/games",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"value contains games array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.games).to.be.an('array')",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Gloomhaven: Jaws of the Lion\",\n    \"description\": \"Vanquish monsters with strategic cardplay in a 25-scenario Gloomhaven campaign.\",\n    \"min_player_count\": 1,\n    \"max_player_count\": 4,\n    \"play_time_minutes\": 120,\n    \"release_date\": \"2020-01-01\",\n    \"age\": 14,\n    \"weight\": 3.61,\n    \"genre_id\": 3,\n    \"designer_id\": 1,\n    \"publisher_id\": 1,\n    \"image_link\": \"https://cf.geekdo-images.com/_HhIdavYW-hid20Iq3hhmg__itemrep/img/a4ec0KY1ksmrKP_2lom7qzCQw_U=/fit-in/246x300/filters:strip_icc()/pic5055631.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/games",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains games array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.games).to.be.an('array')",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"max_player_count\": 2}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/games/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains games array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.games).to.be.an('array')",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/games/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikk3WDFuRUx3RmttdzVwWDNPZ1hSWSJ9.eyJpc3MiOiJodHRwczovL2Rldi10LTBsYTFpaC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjMwNjM4YWY3ZmVhMzM5Zjk5MzFmOTBjIiwiYXVkIjpbImJvYXJkZ2FtZXMiLCJodHRwczovL2Rldi10LTBsYTFpaC51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjYxNzkzMDg4LCJleHAiOjE2NjE4Nzk0ODgsImF6cCI6IkZoM09peHd2UVdNQzBYbGxEYks5YVFPa3BRb1ozWUlwIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTpnYW1lcyIsImRlbGV0ZTpyZXZpZXciLCJwYXRjaDpjb2xsZWN0aW9uIiwicGF0Y2g6ZGVzaWduZXIiLCJwYXRjaDpnYW1lcyIsInBhdGNoOmdlbnJlcyIsInBhdGNoOnB1Ymxpc2hlciIsInBhdGNoOnJlYWN0aW9ucyIsInBhdGNoOnJldmlld3MiLCJwb3N0OmRlc2lnbmVycyIsInBvc3Q6Z2FtZXMiLCJwb3N0OmdlbnJlcyIsInBvc3Q6cHVibGlzaGVycyIsInBvc3Q6cmV2aWV3cyJdfQ.ZooF3ZdCnYznpKxV5u1PqRkoR5o6zlbh7YZ0ab2bVgr7au7N5c1oKsns9Otse2CeEKAMpbZ79QgY7y0EQTrqv2L8JTNUZXWXHk8WIqvDGwF5nmXXWKt4KYCsrUggs6rYxnaba-zE0X5wALVaiEnNHzTddAXekf8tN0TXGxvTkLqULjI15NL0XkGQYkZZkFKKyiRTUMo18eLKB64e-aZ0Ik7oVELUeH1aHlUNw008W8HGXkcoHmQe7va_TyVJRWReM5fwqWCAjSBB67o3mpmQZCnNVCTiKdKW4FH62kodKrPkbueEJhAISE0YrFC3DhTLfzWsIB_eWZY2YEXf8OQNlA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains games array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.games).to.be.an('array')",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/games",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 as users cannot create new games\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Gloomhaven: Jaws of the Lion\",\n    \"description\": \"Vanquish monsters with strategic cardplay in a 25-scenario Gloomhaven campaign.\",\n    \"min_player_count\": 1,\n    \"max_player_count\": 4,\n    \"play_time_minutes\": 120,\n    \"release_date\": \"2020-01-01\",\n    \"age\": 14,\n    \"weight\": 3.61,\n    \"genre_id\": 3,\n    \"designer_id\": 1,\n    \"publisher_id\": 1,\n    \"image_link\": \"https://cf.geekdo-images.com/_HhIdavYW-hid20Iq3hhmg__itemrep/img/a4ec0KY1ksmrKP_2lom7qzCQw_U=/fit-in/246x300/filters:strip_icc()/pic5055631.jpg\",\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/games",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 as users cannot update games\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"max_player_count\": 2}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/games/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 as users cannot delete games\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/games/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikk3WDFuRUx3RmttdzVwWDNPZ1hSWSJ9.eyJpc3MiOiJodHRwczovL2Rldi10LTBsYTFpaC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjMwNjM5MDA3ZmVhMzM5Zjk5MzFmOTIxIiwiYXVkIjpbImJvYXJkZ2FtZXMiLCJodHRwczovL2Rldi10LTBsYTFpaC51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjYxNzkxNzA0LCJleHAiOjE2NjE4NzgxMDQsImF6cCI6IkZoM09peHd2UVdNQzBYbGxEYks5YVFPa3BRb1ozWUlwIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTpyZXZpZXciLCJwYXRjaDpyZWFjdGlvbnMiLCJwYXRjaDpyZXZpZXdzIiwicG9zdDpyZXZpZXdzIl19.LQYfTJFJu9d2-MmJDZb3PRJRgMZ7T1XQVQG6kSiHuKoMxXxSdvVxui4oHuCmozquA8XR0Y1sNa4NVlTqhfJa_4XYslob1LYpQ5tDdvWhcAclvqo875gy7dHd53kMZmLai56idAFFpdK4-nqoaBYlF2376rT9zx06o2YAPZ8fv2mEzvt3SxCmHW5Fr_D4bCf6mDhGpQNSrw_9SegMhuPZr34pKYdP7HJwtqwvbCW09zlFBgSSNdJaBu50okkwcE81m-ZWbbtHsksDUU1j8HSgclQs416AgxFbZ1X8mDa9x4bfjMByu044YzAxgPyI5B34h31NyMkRv4OeO5h02-a6hg",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost:5000"
+		}
+	]
+}

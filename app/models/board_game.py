@@ -19,11 +19,11 @@ class BoardGame(db.Model, CRUDModel):
     release_date = Column(Date)
     age = Column(Integer)
     weight = Column(Float)
-    genre = Column(Integer, ForeignKey("genres.id"))  # TODO
-    designer = Column(Integer, ForeignKey("designers.id"))  # TODO
-    publisher = Column(Integer, ForeignKey("publishers.id"))  # TODO
+    genre = Column(Integer, ForeignKey("genres.id"))
+    designer = Column(Integer, ForeignKey("designers.id"))
+    publisher = Column(Integer, ForeignKey("publishers.id"))
     image_link = Column(String(2048))
-    reviews = db.relationship("Review", backref="board_games", lazy=True)  # TODO
+    reviews = db.relationship("Review", backref="board_games", lazy=True)
 
     def __init__(
         self,
@@ -83,7 +83,7 @@ class Genre(db.Model, CRUDModel):
     id = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True)
     description = Column(String(250))
-    board_games = db.relationship("BoardGame", backref="genres", lazy=True)  # TODO
+    board_games = db.relationship("BoardGame", backref="genres", lazy=True)
 
     def __init__(self, name, description):
         self.name = name
@@ -105,7 +105,7 @@ class Designer(db.Model, CRUDModel):
     id = Column(Integer, primary_key=True)
     first_name = Column(String(120))
     last_name = Column(String(120))
-    board_games = db.relationship("BoardGame", backref="designers", lazy=True)  # TODO
+    board_games = db.relationship("BoardGame", backref="designers", lazy=True)
 
     def __init__(self, first_name, last_name):
         self.first_name = first_name
@@ -130,7 +130,7 @@ class Publisher(db.Model, CRUDModel):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(120))
-    board_games = db.relationship("BoardGame", backref="publishers", lazy=True)  # TODO
+    board_games = db.relationship("BoardGame", backref="publishers", lazy=True)
 
     def __init__(self, name):
         self.name = name

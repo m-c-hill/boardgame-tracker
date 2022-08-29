@@ -1,4 +1,5 @@
 from os import environ as env
+import os
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
@@ -6,7 +7,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from config import Config
+from app.config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -33,13 +34,14 @@ from app.models.board_game import BoardGame, Designer, Genre, Publisher
 from app.models.collection import Collection
 from app.models.review import Review
 from app.models.user import User
+from app.config import config
 
-
-def create_app(config_class: Config):
+def create_app(config_name: str = os.getenv("FLASK_CONFIG") or "default"):
     """
     Application factory to create a Flask app with the supplied configuration
     """
     app = Flask(__name__)
+    config_class = config[config_name]
     app.config.from_object(config_class)
     app.secret_key = env.get("APP_SECRET_KEY")
 
@@ -49,26 +51,15 @@ def create_app(config_class: Config):
         migrate.init_app(app, db, compare_type=True)
         oauth.init_app(app)
 
+        from .main.errors import register_error_handlers
+        register_error_handlers(app)
+
         # TODO: temporary to seed database with initial data. Remove in future.
         try:
             from tests.db_test_data import insert_test_data
-
             insert_test_data()
         except:
             pass
-
-    @app.after_request
-    def after_request(response):
-        """
-        When a request is received, run this method to add additional CORS headers to the response.
-        """
-        response.headers.add(
-            "Access-Control-Allow-Headers", "Content-Type, Authorization"
-        )
-        response.headers.add(
-            "Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS"
-        )
-        return response
 
     from .main import main as main_blueprint
 

@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from flask import request
 from jose import jwt
 
-from ..auth.errors import AuthError
+from ..main.errors import AuthError
 
 ALGORITHMS = ["RS256"]  # RSA using SHA256
 API_AUDIENCE = env.get("API_AUDIENCE")
