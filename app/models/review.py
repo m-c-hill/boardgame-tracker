@@ -34,8 +34,8 @@ class Review(db.Model, CRUDModel):
             else rating
         )
         self.user = user_id
-        self._user_likes = set([])
-        self._user_dislikes = set([])
+        self._user_likes = []
+        self._user_dislikes = []
 
     @property
     def likes(self) -> int:
@@ -48,12 +48,14 @@ class Review(db.Model, CRUDModel):
     def like_review(self, user_id):
         if user_id in self._user_dislikes:
             self._user_dislikes.remove(user_id)
-        self._user_likes.add(user_id)
+        if user_id not in self._user_likes:
+            self._user_likes.append(user_id)
 
     def dislike_review(self, user_id):
         if user_id in self._user_likes:
             self._user_likes.remove(user_id)
-        self._user_dislikes.add(user_id)
+        if user_id not in self._user_dislikes:
+            self._user_dislikes.append(user_id)
 
     def __repr__(self):
         return f"Review('ID':{self.board_game}, 'Rating': {self.rating})"

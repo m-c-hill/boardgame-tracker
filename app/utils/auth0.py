@@ -155,7 +155,7 @@ def requires_auth(permission=""):
             payload = verify_decode_jwt(token)
             # session["user"] = payload
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return f(*args, **kwargs)  # payload, *args, **kwargs)
 
         return wrapper
 

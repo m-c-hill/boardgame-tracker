@@ -6,17 +6,22 @@ from app import db
 from .crud_model import CRUDModel
 
 
+from ..utils.mutable_list import MutableList
+
+
 class Collection(db.Model, CRUDModel):
     __tablename__ = "collections"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    games = Column(ARRAY(Integer))  # IDs of games in the collection
-    private = Column(Boolean)
+    games = Column(
+        MutableList.as_mutable(ARRAY(Integer))
+    )  # IDs of games in the collection
+    private = Column(Boolean, default=True)
 
     def __init__(self, user_id: str):
         self.user_id = user_id
-        self.games = set()
+        self.games = []
         self.private = True
 
     def __repr__(self) -> str:
@@ -26,7 +31,8 @@ class Collection(db.Model, CRUDModel):
         return f"Collection {self.id} contains {len(self.games)} games."
 
     def add(self, game_id: str) -> None:
-        self.games.add(game_id)
+        if not self.includes_game(game_id):
+            self.games.append(game_id)
 
     def remove(self, game_id: str) -> None:
         if self.includes_game(game_id):

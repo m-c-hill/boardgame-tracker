@@ -46,10 +46,10 @@ def update_collection(collection_id):
     try:
         game_id = request.get_json()["game_id"]
         action = request.get_json()["action"]
-
+        breakpoint()
         if action == "add":
             collection.add(game_id)
-        if action == "remove":
+        elif action == "remove":
             collection.remove(game_id)
         collection.update()
 
@@ -57,6 +57,7 @@ def update_collection(collection_id):
             {
                 "success": True,
                 "collection_id": collection.id,
+                "games_in_collection": collection.games,
                 "action": action,
                 "game_id": game_id,
             }

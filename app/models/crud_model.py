@@ -7,6 +7,7 @@ class CRUDModel:
         db.session.commit()
 
     def update(self):
+        db.session.merge(self)
         db.session.commit()
 
     def delete(self):

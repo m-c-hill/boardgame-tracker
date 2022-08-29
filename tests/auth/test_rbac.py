@@ -6,6 +6,10 @@ Admins can create board games, users cannot
 """
 
 
+def test_missing_authorization_header():
+    pass
+
+
 def test_user_can_submit_review(client, review):
     pass
 

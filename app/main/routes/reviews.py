@@ -87,7 +87,7 @@ def update_review(review_id):
         review.update()
 
         reviews = (
-            Review.query.filter_by(board_game=review.get("board_game"))
+            Review.query.filter_by(board_game=review.board_game)
             .order_by(Review.id)
             .all()
         )
@@ -158,6 +158,7 @@ def react_to_review(review_id):
             review.like_review(user_id)
         elif body.get("dislikes"):
             review.dislike_review(user_id)
+        breakpoint()
         review.update()
         return jsonify(
             {
