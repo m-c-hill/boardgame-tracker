@@ -3,7 +3,7 @@ from functools import wraps
 from os import environ as env
 from urllib.request import urlopen
 
-from flask import request, session
+from flask import request
 from jose import jwt
 
 from ..auth.errors import AuthError

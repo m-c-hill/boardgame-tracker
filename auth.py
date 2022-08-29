@@ -1,0 +1,23 @@
+{
+    "access_token": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtdC0wbGExaWgudXMuYXV0aDAuY29tLyJ9..LfSl_34HHkPyrR85._EXFnNmYlXmff7JBrceI7-PmvFPQK1yfeKn3gokgz3erIPQVJ0_wlI2FtUT1iZwkXBY_xG7tWSL-98Ab-k0JaDquIM41HupHLNWJoBeFA5l9ZYfrolUbHrizosqoKwummGAfxzHk39445-np0M5SSHQWTzUS0KdzamViS0jCQss5xEwios34Vjk9r0_FbmcgUrwekJblz4cn3FAtiWaRpYK1PYv4V2i7Pz0FRAKZ0oEYyLo3tI7aWy70JY5ztFf1mZUiDSmBCvNEDWNELLMLKl8EmET73xDf7xTocwlu_wasupD08YC887Kc51QK85Uh4-0.yg_LE9Gean0V9_clkokkgw",
+    "id_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikk3WDFuRUx3RmttdzVwWDNPZ1hSWSJ9.eyJuaWNrbmFtZSI6InVzZXIiLCJuYW1lIjoidXNlciIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci8wMGZkYjRhZjk0YzEzOWVlOTFmNGRhNjZhNTc1MjY3Yj9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnVzLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDIyLTA4LTI3VDE4OjU3OjA0LjE4OFoiLCJlbWFpbCI6InVzZXJAZ2FtZXMuaW8iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOi8vZGV2LXQtMGxhMWloLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2MzA2MzkwMDdmZWEzMzlmOTkzMWY5MjEiLCJhdWQiOiJGaDNPaXh3dlFXTUMwWGxsRGJLOWFRT2twUW9aM1lJcCIsImlhdCI6MTY2MTc4NzY5OSwiZXhwIjoxNjYxODc0MDk5LCJzaWQiOiJHNlNZc2pYNUZiU2JQUGs4Zzgxa1h5UDAwaVFyR0ktUSIsIm5vbmNlIjoiOHZIQUcxM0hDUXlaUnhoS1hXZTIifQ.qrMeYvbv-CaK_uHUrk7TTkAufnmlU24xoCtXPQyrV8UgRYQH08MK2O5yHeKgBFEKsawIQ-UpiHgz6SFHsNBgI3uXcHFI2r2pf0G6nyHUaZuJDtbHE4zUtI4FvqTWhrh6aMGGDaQK1jXWkZrCdND594RkvWB-weo-CJ4u2BZSG6o8mU-4c8OAEgWfP3KgCCd0NlhXP9ikTsJhiryADR0xslZvuXbvbaH4GmQ0W-QtIyc-PVrT6Aur7qsfPlkgI58TdiUTNNOCuqUjJQ1qZNX6VNsxq2h9whJaDS-_0lS9CJ8e8JVjthYssfr49HpyUUjwrNYurL9Iwnwyc6AwQMNzAQ",
+    "scope": "openid profile email",
+    "expires_in": 86400,
+    "token_type": "Bearer",
+    "expires_at": 1661874100,
+    "userinfo": {
+        "nickname": "user",
+        "name": "user",
+        "picture": "https://s.gravatar.com/avatar/00fdb4af94c139ee91f4da66a575267b?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fus.png",
+        "updated_at": "2022-08-27T18:57:04.188Z",
+        "email": "user@games.io",
+        "email_verified": False,
+        "iss": "https://dev-t-0la1ih.us.auth0.com/",
+        "sub": "auth0|630639007fea339f9931f921",
+        "aud": "Fh3OixwvQWMC0XllDbK9aQOkpQoZ3YIp",
+        "iat": 1661787699,
+        "exp": 1661874099,
+        "sid": "G6SYsjX5FbSbPPk8g81kXyP00iQrGI-Q",
+        "nonce": "8vHAG13HCQyZRxhKXWe2",
+    },
+}

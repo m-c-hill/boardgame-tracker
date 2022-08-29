@@ -10,17 +10,21 @@ def test_missing_authorization_header():
     pass
 
 
-def test_user_can_submit_review(client, review):
-    pass
+"""
+Remaining tests can be found in attached Postman collection.
+"""
 
 
-def test_admin_cannot_submit_review(client, review):
-    pass
+"""
+User
+- get all games
+- post a game
+- update a game
+- delete a game
 
-
-def test_user_cannot_add_game(client, game):
-    pass
-
-
-def test_admin_can_add_game(client, game):
-    pass
+Admin
+- get all games
+- post a game
+- update a game
+- delete a game
+"""

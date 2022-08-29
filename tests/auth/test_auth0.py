@@ -117,31 +117,32 @@ def test_check_permissions_raises_auth_error_missing_permission():
         check_permissions("patch:genres", payload)
 
 
-# TODO: come back to this after endpoint tests
-def test_verify_decode_jwt(mocker, jwks, token):  # TODO: (mock jwks)
-    mocker.patch(
-        "app.utils.auth0._retrieve_jwks",
-        return_value=jwks,
-    )
-    verify_decode_jwt(token)
-    # assert equal to payload
+# TODO
+
+# def test_verify_decode_jwt(mocker, jwks, token):  # TODO: (mock jwks)
+#     mocker.patch(
+#         "app.utils.auth0._retrieve_jwks",
+#         return_value=jwks,
+#     )
+#     verify_decode_jwt(token)
+#     # assert equal to payload
 
 
-def test_verify_decode_jwt_raises_auth_error():  # (kid not in header)
-    pass
+# def test_verify_decode_jwt_raises_auth_error():  # (kid not in header)
+#     pass
 
 
-def test_verify_decode_jwt_raises_claims_error():
-    pass
+# def test_verify_decode_jwt_raises_claims_error():
+#     pass
 
 
-def verify_decode_jwt_raises_expired_signature_error():
-    pass
+# def verify_decode_jwt_raises_expired_signature_error():
+#     pass
 
 
-def test_verify_decode_jwt_raises_auth_error_cannot_parse_token():
-    pass
+# def test_verify_decode_jwt_raises_auth_error_cannot_parse_token():
+#     pass
 
 
-def test_verify_decode_jwt_raises_auth_error_missing_rsa_key():
-    pass
+# def test_verify_decode_jwt_raises_auth_error_missing_rsa_key():
+#     pass

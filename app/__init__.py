@@ -30,6 +30,7 @@ oauth.register(
 
 # Import models
 from app.models.board_game import BoardGame, Designer, Genre, Publisher
+from app.models.collection import Collection
 from app.models.review import Review
 from app.models.user import User
 
@@ -47,6 +48,14 @@ def create_app(config_class: Config):
         db.create_all()
         migrate.init_app(app, db, compare_type=True)
         oauth.init_app(app)
+
+        # TODO: temporary to seed database with initial data. Remove in future.
+        try:
+            from tests.db_test_data import insert_test_data
+
+            insert_test_data()
+        except:
+            pass
 
     @app.after_request
     def after_request(response):

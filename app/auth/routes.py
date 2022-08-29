@@ -1,9 +1,10 @@
 from os import environ as env
 from urllib.parse import quote_plus, urlencode
 
-from flask import redirect, session, url_for
+from flask import jsonify, redirect, session, url_for
 
 from app import oauth
+from app.utils.authentication import get_current_user_id
 
 from ..utils.registration import (
     check_user_in_database,
@@ -18,14 +19,21 @@ from . import auth
 @auth.route("/")
 def home():
     if session.get("user"):
-        return "User logged in"
-    return "User logged out"
+        return jsonify(
+            {
+                "logged_in": True,
+                "user_id": get_current_user_id(session),
+                "active_jwt": session["user"]["access_token"],
+            }
+        )
+    return jsonify({"logged_in": False, "user_id": None, "active_jwt": None})
 
 
 @auth.route("/login")
 def login():
     return oauth.auth0.authorize_redirect(
-        redirect_uri=url_for("auth.callback", _external=True)
+        redirect_uri=url_for("auth.callback", _external=True),
+        audience=env.get("API_AUDIENCE"),
     )
 
 

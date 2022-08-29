@@ -8,11 +8,6 @@ def resource_not_found(error):
     return jsonify({"success": False, "error": 400, "message": "Bad request"}), 400
 
 
-@main.errorhandler(401)
-def unauthorized(error):
-    return jsonify({"success": False, "error": 401, "message": "Unauthorized"}), 401
-
-
 @main.errorhandler(404)
 def resource_not_found(error):
     return jsonify({"success": False, "error": 404, "message": "Not found"}), 404

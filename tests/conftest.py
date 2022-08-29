@@ -7,7 +7,6 @@ from app.models.review import Review
 from config import config
 from tests.db_test_data import insert_test_data
 
-
 # =======================
 #  Test app and client
 # =======================
