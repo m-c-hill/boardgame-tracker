@@ -156,9 +156,8 @@ def react_to_review(review_id):
     try:
         if body.get("like"):
             review.like_review(user_id)
-        elif body.get("dislikes"):
+        elif body.get("dislike"):
             review.dislike_review(user_id)
-        breakpoint()
         review.update()
         return jsonify(
             {

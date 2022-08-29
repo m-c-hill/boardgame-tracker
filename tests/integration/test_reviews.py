@@ -106,7 +106,6 @@ def test_get_reactions_for_review(client):
     }
 
 
-# TODO: resolve issue with user_likes list
 def test_like_review(client, mocker):
     mocker.patch("app.main.routes.reviews.check_user_id", return_value=True)
     mocker.patch("app.main.routes.reviews.get_current_user_id", return_value=1)
@@ -128,7 +127,6 @@ def test_like_review(client, mocker):
     }
 
 
-# TODO: resolve issue with user_dislikes list
 def test_dislike_review(client, mocker):
     mocker.patch("app.main.routes.reviews.check_user_id", return_value=True)
     mocker.patch("app.main.routes.reviews.get_current_user_id", return_value=1)

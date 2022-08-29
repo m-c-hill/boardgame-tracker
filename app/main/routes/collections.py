@@ -46,7 +46,6 @@ def update_collection(collection_id):
     try:
         game_id = request.get_json()["game_id"]
         action = request.get_json()["action"]
-        breakpoint()
         if action == "add":
             collection.add(game_id)
         elif action == "remove":

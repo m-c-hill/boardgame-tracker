@@ -3,6 +3,7 @@ from sqlalchemy.types import ARRAY
 
 from app import db
 
+from ..utils.mutable_list import MutableList
 from .crud_model import CRUDModel
 
 # Limits for review ratings
@@ -20,8 +21,8 @@ class Review(db.Model, CRUDModel):
     user = Column(Integer, ForeignKey("users.id"))
     likes = Column(Integer)
     dislikes = Column(Integer)
-    _user_likes = Column(ARRAY(Integer))
-    _user_dislikes = Column(ARRAY(Integer))
+    _user_likes = Column(MutableList.as_mutable(ARRAY(Integer)))
+    _user_dislikes = Column(MutableList.as_mutable(ARRAY(Integer)))
 
     def __init__(self, game_id, review_text, rating, user_id):
         self.board_game = game_id

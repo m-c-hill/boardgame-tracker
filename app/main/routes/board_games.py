@@ -82,15 +82,14 @@ def get_reviews_for_game(game_id):
 @requires_auth("post:games")
 def create_game():
     body = request.get_json()
-
     try:
         game = BoardGame(
             title=body.get("title"),
             description=body.get("description"),
             min_player_count=body.get("min_player_count"),
             max_player_count=body.get("max_player_count"),
-            play_time_minutes=body.get("play_time_minutes"),  # TODO: convert to time
-            release_date=body.get("release_date"),  # TODO: convert to date
+            play_time_minutes=body.get("play_time_minutes"),
+            release_date=body.get("release_date"),
             age=body.get("age"),
             weight=body.get("weight"),
             genre_id=body.get("genre_id"),
@@ -134,13 +133,10 @@ def update_game(game_id):
         game.description = updates.get("description", game.description)
         game.min_player_count = updates.get("min_player_count", game.min_player_count)
         game.max_player_count = updates.get("max_player_count", game.max_player_count)
-        play_time_str = updates.get("play_time_minutes", game.play_time)
-        game.play_time_minutes = ""  # datetime.strptime(
-        #     updated_at, "%Y-%m-%dT%H:%M:%S.%fZ"
-        # )  # TODO: convert to time?
-        game.release_date = updates.get(
-            "release_date", game.release_date
-        )  # TODO: convert to date?
+        game.play_time_minutes = updates.get(
+            "play_time_minutes", game.play_time_minutes
+        )
+        game.release_date = updates.get("release_date", game.release_date)
         game.age = updates.get("age", game.age)
         game.weight = updates.get("weight", game.weight)
         game.genre = updates.get("genre", game.genre)
@@ -179,6 +175,16 @@ def delete_game(game_id):
             review.delete()
         game.delete()
 
-        return jsonify({"success": True, "deleted": game.id})
+        games = BoardGame.query.order_by(BoardGame.id).all()
+        formatted_games = paginate_items(request, games, GAMES_PER_PAGE)
+
+        return jsonify(
+            {
+                "success": True,
+                "deleted": game.id,
+                "games": formatted_games,
+                "total_games": len(games),
+            }
+        )
     except:
         abort(422)

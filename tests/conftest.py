@@ -8,6 +8,11 @@ from config import config
 from tests.db_test_data import insert_test_data
 
 
+# =======================
+#  Test app and client
+# =======================
+
+
 @pytest.fixture(scope="function")
 def app():
     app_config = config["testing"]
@@ -454,17 +459,155 @@ def reviews_for_game_1():
 
 @pytest.fixture()
 def new_game_response():
-    return  # TODO
+    return {
+        "created": 7,
+        "games": [
+            {
+                "age": 10,
+                "description": "Bluff (and call bluffs!) to victory in this card game with no third chances.",
+                "designer": 1,
+                "genre": 3,
+                "id": 6,
+                "image_link": "https://m.media-amazon.com/images/I/61JeFo5pWVL._AC_SY879_.jpg",
+                "max_player_count": 6,
+                "min_player_count": 2,
+                "play_time_minutes": 15,
+                "publisher": 1,
+                "release_date": "2013-11-01",
+                "title": "Coup",
+                "weight": 2.1,
+            },
+            {
+                "age": 14,
+                "description": "Vanquish monsters with strategic cardplay in a 25-scenario Gloomhaven campaign.",
+                "designer": 1,
+                "genre": 3,
+                "id": 7,
+                "image_link": "https://cf.geekdo-images.com/_HhIdavYW-hid20Iq3hhmg__itemrep/img/a4ec0KY1ksmrKP_2lom7qzCQw_U=/fit-in/246x300/filters:strip_icc()/pic5055631.jpg",
+                "max_player_count": 4,
+                "min_player_count": 1,
+                "play_time_minutes": 120,
+                "publisher": 1,
+                "release_date": "2020-01-01",
+                "title": "Gloomhaven: Jaws of the Lion",
+                "weight": 3.61,
+            },
+        ],
+        "success": True,
+        "total_games": 7,
+    }
 
 
 @pytest.fixture()
 def update_game_response():
-    return  # TODO
+    return {
+        "games": [
+            {
+                "age": 10,
+                "description": "Bluff (and call bluffs!) to victory in this card game with no third chances.",
+                "designer": 1,
+                "genre": 3,
+                "id": 6,
+                "image_link": "https://m.media-amazon.com/images/I/61JeFo5pWVL._AC_SY879_.jpg",
+                "max_player_count": 3,
+                "min_player_count": 2,
+                "play_time_minutes": 15,
+                "publisher": 1,
+                "release_date": "2013-11-01",
+                "title": "Coup",
+                "weight": 2.1,
+            }
+        ],
+        "success": True,
+        "total_games": 6,
+        "updated": 6,
+    }
 
 
 @pytest.fixture()
 def delete_game_response():
-    return  # TODO
+    return {
+        "deleted": 1,
+        "games": [
+            {
+                "age": 10,
+                "description": "Science? Military? What will you draft to win this head-to-head version of 7 Wonders?",
+                "designer": 5,
+                "genre": 1,
+                "id": 2,
+                "image_link": "https://cf.geekdo-images.com/zdagMskTF7wJBPjX74XsRw__itemrep/img/x5L93n_pSsxfFZ0Ir-JqtjLf-Jw=/fit-in/246x300/filters:strip_icc()/pic2576399.jpg",
+                "max_player_count": 2,
+                "min_player_count": 2,
+                "play_time_minutes": 30,
+                "publisher": 5,
+                "release_date": "2018-01-01",
+                "title": "7 Wonders Duel",
+                "weight": 2.22,
+            },
+            {
+                "age": 10,
+                "description": "Hike through National Parks tiles, collecting memories and admiring gorgeous scenery.",
+                "designer": 4,
+                "genre": 3,
+                "id": 3,
+                "image_link": "https://cf.geekdo-images.com/mF2cSNRk2O6HtE45Sl9TcA__opengraph/img/uoYOX2JqGtmeJ6o5wMmfypahWEs=/fit-in/1200x630/filters:strip_icc()/pic4852372.jpg",
+                "max_player_count": 5,
+                "min_player_count": 1,
+                "play_time_minutes": 40,
+                "publisher": 4,
+                "release_date": "2019-01-01",
+                "title": "Parks",
+                "weight": 2.16,
+            },
+            {
+                "age": 8,
+                "description": "Your team of experts must prevent the world from succumbing to a viral pandemic.",
+                "designer": 3,
+                "genre": 2,
+                "id": 4,
+                "image_link": "https://cdn.waterstones.com/override/v5/large/0681/7067/0681706711003.jpg",
+                "max_player_count": 4,
+                "min_player_count": 1,
+                "play_time_minutes": 45,
+                "publisher": 3,
+                "release_date": "2008-06-01",
+                "title": "Pandemic",
+                "weight": 2.41,
+            },
+            {
+                "age": 12,
+                "description": "Compete with rival CEOs to make Mars habitable and build your corporate empire.",
+                "designer": 2,
+                "genre": 1,
+                "id": 5,
+                "image_link": "https://www.boardgamequest.com/wp-content/uploads/2016/11/Terraforming-Mars-300x300.jpg",
+                "max_player_count": 5,
+                "min_player_count": 1,
+                "play_time_minutes": 120,
+                "publisher": 2,
+                "release_date": "2016-01-01",
+                "title": "Terraforming Mars",
+                "weight": 3.25,
+            },
+            {
+                "age": 10,
+                "description": "Bluff (and call bluffs!) to victory in this card game with no third chances.",
+                "designer": 1,
+                "genre": 3,
+                "id": 6,
+                "image_link": "https://m.media-amazon.com/images/I/61JeFo5pWVL._AC_SY879_.jpg",
+                "max_player_count": 6,
+                "min_player_count": 2,
+                "play_time_minutes": 15,
+                "publisher": 1,
+                "release_date": "2013-11-01",
+                "title": "Coup",
+                "weight": 2.1,
+            },
+        ],
+        "success": True,
+        "total_games": 5,
+    }
 
 
 # =====================

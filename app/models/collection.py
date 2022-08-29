@@ -3,10 +3,8 @@ from sqlalchemy.types import ARRAY
 
 from app import db
 
-from .crud_model import CRUDModel
-
-
 from ..utils.mutable_list import MutableList
+from .crud_model import CRUDModel
 
 
 class Collection(db.Model, CRUDModel):

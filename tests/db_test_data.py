@@ -181,8 +181,8 @@ def _insert_reviews():
         5,
         1,
     )
-    review_1._user_likes = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
-    review_1._user_dislikes = set([10, 11, 12])
+    review_1._user_likes = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    review_1._user_dislikes = [10, 11, 12]
 
     reviews = [
         review_1,
