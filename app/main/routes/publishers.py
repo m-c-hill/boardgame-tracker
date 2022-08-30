@@ -88,7 +88,7 @@ def create_publisher():
 
 
 @main.route("/publishers/<int:publisher_id>", methods=["PATCH"])
-@requires_auth("patch:publishers")
+@requires_auth("patch:publisher")
 def update_publisher(publisher_id):
     publisher = Publisher.query.filter_by(id=publisher_id).one_or_none()
 

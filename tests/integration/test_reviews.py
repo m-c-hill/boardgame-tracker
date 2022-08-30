@@ -88,7 +88,7 @@ def test_delete_review(client, mocker):
     mocker.patch("app.main.routes.reviews.check_user_id", return_value=True)
     mocker.patch(
         "app.utils.auth0.verify_decode_jwt",
-        return_value={"permissions": ["delete:reviews"]},
+        return_value={"permissions": ["delete:review"]},
     )
     response = client.delete("/api/reviews/3", headers={"Authorization": "Bearer x"})
     assert response.status_code == 200

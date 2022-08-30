@@ -106,7 +106,7 @@ def update_review(review_id):
 
 
 @main.route("/reviews/<int:review_id>", methods=["DELETE"])
-@requires_auth("delete:reviews")
+@requires_auth("delete:review")
 def delete_review(review_id):
     review = Review.query.filter_by(id=review_id).one_or_none()
 

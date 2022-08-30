@@ -96,7 +96,7 @@ def create_designer():
 
 
 @main.route("/designers/<int:designer_id>", methods=["PATCH"])
-@requires_auth("patch:designers")
+@requires_auth("patch:designer")
 def update_designer(designer_id):
     designer = Designer.query.filter_by(id=designer_id).one_or_none()
 
