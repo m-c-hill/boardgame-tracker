@@ -623,7 +623,6 @@ paths:
           description: Authorization error
         "404":
           description: Invalid id supplied
-
 # components:
 #   schemas:
 #     id:

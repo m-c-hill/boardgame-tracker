@@ -86,6 +86,8 @@ A [Postman](https://www.postman.com/) collection is [also included](boardgame-tr
 
 [Auth0](https://auth0.com/docs/get-started/auth0-overview) is a flexible, drop-in solution to add authentication and authorization services to applications. It minimises the cost, time, and risk associated with building an in-house solution to authenticate and authorize users.
 
+The Auth0 JWT includes claims for permissions based on the user's role within the Auth0 system. Endpoints with the `requires_auth` decorator will check if a particular permission exists within the JWT permissions claim of the currently logged in user.
+
 ### Setting Up Auth0
 
 **The following is optional!** Users can link this API to their own Auth0 account using the following steps:
@@ -139,7 +141,7 @@ You will now be able to login to the API using the newly created users through y
 
 The API is currently hosted on [Heroku](https://www.heroku.com/) and can be accessed here: https://board--game--tracker.herokuapp.com/api
 
-As discussed above, many of the API endpoints must be authorized using a JWT. Two dummy user accounts have been set up to allow users to generate JWTs with different permissions associated with them:
+As discussed above, many of the API endpoints must be authorized by checking for a particular permission in the claims of the user's JWT. Two dummy user accounts have been set up to allow users to generate JWTs with different permissions associated with them:
 
 ```
 Admin
