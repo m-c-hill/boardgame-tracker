@@ -1,6 +1,6 @@
 from datetime import date
 
-from app.models.board_game import BoardGame, Designer, Genre, Publisher
+from app.domain.board_game import BoardGame, Designer, Genre, Publisher
 
 
 def test_create_board_game():

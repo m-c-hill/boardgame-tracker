@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import session
 
-from ..models.collection import Collection
-from ..models.user import User
+from ..domain.collection import Collection
+from ..domain.user import User
 from ..utils.authentication import get_current_user_id
 
 

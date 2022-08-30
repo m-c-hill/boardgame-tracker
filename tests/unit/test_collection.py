@@ -1,6 +1,6 @@
 import pytest
 
-from app.models.collection import Collection
+from app.domain.collection import Collection
 
 
 def test_create_collection():

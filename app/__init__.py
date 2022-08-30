@@ -32,10 +32,10 @@ oauth.register(
 from app.config import config
 
 # Import models
-from app.models.board_game import BoardGame, Designer, Genre, Publisher
-from app.models.collection import Collection
-from app.models.review import Review
-from app.models.user import User
+from app.domain.board_game import BoardGame, Designer, Genre, Publisher
+from app.domain.collection import Collection
+from app.domain.review import Review
+from app.domain.user import User
 
 
 def create_app(config_name: str = os.getenv("FLASK_CONFIG") or "default"):

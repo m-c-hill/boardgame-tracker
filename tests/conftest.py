@@ -2,9 +2,9 @@ import pytest
 
 from app import create_app, db
 from app.config import config
-from app.models.board_game import BoardGame
-from app.models.collection import Collection
-from app.models.review import Review
+from app.domain.board_game import BoardGame
+from app.domain.collection import Collection
+from app.domain.review import Review
 from tests.db_test_data import insert_test_data
 
 # =======================
@@ -616,3 +616,8 @@ def delete_game_response():
 @pytest.fixture()
 def not_found_error():
     return {"success": False, "error": 404, "message": "Not found"}
+
+
+@pytest.fixture()
+def bad_request():
+    return {"success": False, "error": 400, "message": "Bad request"}

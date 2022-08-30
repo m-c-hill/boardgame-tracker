@@ -1,6 +1,6 @@
 from flask import abort, jsonify, request, session
 
-from ...models.review import Review
+from ...domain.review import Review
 from ...utils.auth0 import requires_auth
 from ...utils.authentication import check_user_id, get_current_user_id
 from ...utils.requests import paginate_items

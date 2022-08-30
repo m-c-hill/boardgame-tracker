@@ -1,4 +1,4 @@
-from app.models.review import Review
+from app.domain.review import Review
 
 
 def test_create_review():

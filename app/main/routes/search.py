@@ -1,6 +1,6 @@
 from flask import jsonify, request
 
-from ...models.board_game import BoardGame
+from ...domain.board_game import BoardGame
 from .. import main
 
 
@@ -12,7 +12,7 @@ def search_games():
         BoardGame.title.ilike(f"%{search_term}%")
     ).all()
     games = [game.format() for game in search_results]
-
+    
     return jsonify(
         {
             "success": True,

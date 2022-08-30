@@ -1,6 +1,6 @@
 from flask import abort, jsonify, request
 
-from ...models.board_game import BoardGame, Designer
+from ...domain.board_game import BoardGame, Designer
 from ...utils.auth0 import requires_auth
 from ...utils.requests import paginate_items
 from .. import main

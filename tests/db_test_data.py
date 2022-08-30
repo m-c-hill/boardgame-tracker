@@ -1,7 +1,7 @@
-from app.models.board_game import BoardGame, Designer, Genre, Publisher
-from app.models.collection import Collection
-from app.models.review import Review
-from app.models.user import User
+from app.domain.board_game import BoardGame, Designer, Genre, Publisher
+from app.domain.collection import Collection
+from app.domain.review import Review
+from app.domain.user import User
 
 
 def insert_test_data():

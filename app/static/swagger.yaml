@@ -1,0 +1,660 @@
+---
+openapi: 3.0.0
+info:
+  description:
+    REST API built using Flask to allow users to track the board games
+    they play, share reviews with others and add games to their collection.
+  version: 1.0.0
+  title: Board Game Tracker
+tags:
+  - name: Board Games
+    description:
+      Board game information requests including reviews, as well as requests
+      for creating, updating and deleting games.
+  - name: Collections
+    description:
+      Request games in a user's collection and update a collection by adding
+      or removing games.
+  - name: Designers
+    description:
+      Designer information requests, including creating, updating and deleting
+      designers.
+  - name: Genres
+    description:
+      Genre information requests, including creating, updating and deleting
+      genres.
+  - name: Publishers
+    description:
+      Publisher information requests, including creating, updating and deleting
+      publishers.
+  - name: Reviews
+    description:
+      Request sets of reviews. Allow users to create new reviews to share
+      with others, and react to existing reviews by liking or disliking.
+  - name: Search
+    description:
+      Simple search function to return games with titles matching a given
+      phrase.
+paths:
+  # USERS
+  "/api/users/{username}/reviews":
+    get:
+      tags:
+        - Users
+      summary: Returns all reviews posted by a specific user
+      parameters:
+        - name: username
+          in: path
+          description: username of user to return reviews for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/userReviews"
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: No reviews for user found
+
+  # DESIGNERS
+  "/api/designers":
+    get:
+      tags:
+        - Designers
+      summary: Retrieve all designers
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/designers"
+        "404":
+          description: No designers found
+    post:
+      tags:
+        - Designers
+      summary: Add a new designer
+      requestBody:
+        description: Designer Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/designerRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/designerPostResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "422":
+          description: Failed. Bad post data.
+  "/api/designers/{id}":
+    get:
+      tags:
+        - Designers
+      summary: Returns designers by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of designers to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/designer/id"
+        "404":
+          description: Invalid designerId supplied
+    patch:
+      tags:
+        - Designers
+      summary: Update a designer
+      requestBody:
+        description: Designer Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/designerRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/designerPatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+
+  # GENRES
+  "/api/genres":
+    get:
+      tags:
+        - Genres
+      summary: Retrieve all genres
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/genres"
+        "404":
+          description: No genres found
+    post:
+      tags:
+        - Genres
+      summary: Add a new genre
+      requestBody:
+        description: Genre Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/genreRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/genrePostResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "422":
+          description: Failed. Bad post data.
+  "/api/genres/{id}":
+    get:
+      tags:
+        - Genres
+      summary: Returns genres by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of genre to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/genre/id"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Genres
+      summary: Update a genre
+      requestBody:
+        description: Genre Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/genreRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/genrePatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+
+  # PUBLISHERS
+  "/api/publishers":
+    get:
+      tags:
+        - Publishers
+      summary: Retrieve all publishers
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/publishers"
+        "404":
+          description: No publishers found
+    post:
+      tags:
+        - Publishers
+      summary: Add a new publisher
+      requestBody:
+        description: Publisher Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/publisherRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/publisherPostResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "422":
+          description: Failed. Bad post data.
+  "/api/publisher/{id}":
+    get:
+      tags:
+        - Publishers
+      summary: Returns publishers by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of publisher to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/publisher/id"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Publishers
+      summary: Update a publisher
+      requestBody:
+        description: Publisher Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/publisherRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/publisherPatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+
+  # SEARCH
+  "/api/search":
+    post:
+      tags:
+        - Search
+      summary: Retrieve board games with titles matching a given search term
+      requestBody:
+        description: Search Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/searchRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/searchResponse"
+
+  # REVIEWS
+  "/api/reviews":
+    get:
+      tags:
+        - Reviews
+      summary: Retrieve all reviews
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/reviews"
+        "404":
+          description: No reviews found
+    post:
+      tags:
+        - Reviews
+      summary: Add a new review
+      requestBody:
+        description: Review Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/reviewRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/reviewPostResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "422":
+          description: Failed. Bad post data.
+  "/api/reviews/{id}":
+    get:
+      tags:
+        - Reviews
+      summary: Returns review by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of review to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/reviews/id"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Reviews
+      summary: Update a review
+      requestBody:
+        description: Review Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/genreRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/reviewPatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+  "/api/reviews/{id}/reactions":
+    get:
+      tags:
+        - Reviews
+      summary: Returns likes and dislikes for a specific review
+      parameters:
+        - name: id
+          in: path
+          description: ID of review to retrieve reactions for
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/reviews/id/reactions"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Reviews
+      summary: React to a review (like or dislike)
+      requestBody:
+        description: Reaction Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/reactionRequestPatchBody/"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/reactionPatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+
+  # BOARD GAMES
+  "/api/games":
+    get:
+      tags:
+        - Board Games
+      summary: Retrieve all games
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/games"
+        "404":
+          description: No games found
+    post:
+      tags:
+        - Board Games
+      summary: Add a new game
+      requestBody:
+        description: Game Request Post Object
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/gameRequestPostBody"
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/gamePostResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "422":
+          description: Failed. Bad post data.
+  "/api/games/{id}":
+    get:
+      tags:
+        - Board Games
+      summary: Returns game by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of game to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/games/id"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Games
+      summary: Update a game
+      requestBody:
+        description: Game Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/gameRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/gamePatchResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+  "/api/games/{id}/reviews":
+    get:
+      tags:
+        - Board Games
+      summary: Returns all user reviews for a specific game
+      parameters:
+        - name: id
+          in: path
+          description: ID of game to retrieve reviews for
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/game/id/reviews"
+        "404":
+          description: Invalid id supplied
+
+  # COLLECTIONS
+  "/api/collections/{id}/games":
+    get:
+      tags:
+        - Collections
+      summary: Returns all games in a collection
+      parameters:
+        - name: id
+          in: path
+          description: ID of collection to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/components/schemas/collectionGames"
+        "404":
+          description: Invalid id supplied
+    patch:
+      tags:
+        - Collections
+      summary: Add or a remove a game from a collection
+      requestBody:
+        description: Collection Games Request Patch Object
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/collectionGamesRequestPatchBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/collectionGamesResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+        "422":
+          description: Failed. Bad post data.
+  "/api/collections/{id}/privacy":
+    patch:
+      tags:
+        - Collections
+      summary: Toggle the privacy of a collection
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            "$ref": "#/components/schemas/collectionPrivacyResponse"
+        "401":
+          description: Authentication error
+        "403":
+          description: Authorization error
+        "404":
+          description: Invalid id supplied
+
+# components:
+#   schemas:
+#     id:
+#       properties:
+#         uuid:
+#           type: string
+#     bookRequestPostBody:
+#       type: object
+#       properties:
+#         title:
+#           type: string
+#           format: string
+#         email:
+#           type: string
+#           format: email
+#     bookRequest:
+#       type: object
+#       properties:
+#         title:
+#           type: string
+#           format: string
+#         email:
+#           type: string
+#           format: email
+#         timestamp:
+#           type: string
+#           format: number
+#     bookRequests:
+#       type: object
+#       properties:
+#         bookRequest:
+#           type: object
+#           additionalProperties:
+#             "$ref": "#/components/schemas/bookRequest"

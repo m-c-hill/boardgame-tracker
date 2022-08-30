@@ -42,22 +42,15 @@ class ProductionConfig(Config):
 
 
 class HerokuConfig(Config):
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI") or get_database_path(
-    #     "boardgames"
-    # )
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("postgres://", "postgresql://", 1)
-
-class DockerConfig(Config):
-    SQLALCHEMY_DATABASE_URI = get_database_path(
-        "boardgames"
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "").replace(
+        "postgres://", "postgresql://", 1
     )
+
 
 config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,
     "production": ProductionConfig,
     "heroku": HerokuConfig,
-    "docker": DockerConfig,
     "default": DevelopmentConfig,
 }

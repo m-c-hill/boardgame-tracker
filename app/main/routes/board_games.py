@@ -1,8 +1,8 @@
 from flask import abort, jsonify, request
 from numpy import mean
 
-from ...models.board_game import BoardGame
-from ...models.review import Review
+from ...domain.board_game import BoardGame
+from ...domain.review import Review
 from ...utils.auth0 import requires_auth
 from ...utils.requests import paginate_items
 from .. import main
