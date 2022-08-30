@@ -4,7 +4,8 @@ import os
 def get_database_path(database_name):
     postgres_user = os.environ.get("POSTGRES_USER", "postgres")
     postgres_pw = os.environ.get("POSTGRES_PW", "password")
-    return f"postgresql://{postgres_user}:{postgres_pw}@localhost:5432/{database_name}"
+    host = os.environ.get("POSTGRES_HOST", "localhost")
+    return f"postgresql://{postgres_user}:{postgres_pw}@{host}:5432/{database_name}"
 
 
 class Config(object):
@@ -40,9 +41,21 @@ class ProductionConfig(Config):
     )
 
 
+class HerokuConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI") or get_database_path(
+        "boardgames"
+    )
+
+class DockerConfig(Config):
+    SQLALCHEMY_DATABASE_URI = get_database_path(
+        "boardgames"
+    )
+
 config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,
     "production": ProductionConfig,
+    "heroku": HerokuConfig,
+    "docker": DockerConfig,
     "default": DevelopmentConfig,
 }
